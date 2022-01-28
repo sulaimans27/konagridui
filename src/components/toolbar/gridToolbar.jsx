@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
+
 import {
   Flex,
   Heading,
@@ -23,6 +25,7 @@ import {
   InputLeftElement,
   Select,
   Stack,
+  List,
 } from "@chakra-ui/react";
 
 import { MdPersonAdd } from "react-icons/md";
@@ -66,7 +69,34 @@ import { DiFirebase } from "react-icons/di";
 import { BiFilterAlt } from "react-icons/bi";
 import { VscChecklist } from "react-icons/vsc";
 
-function gridToolbar() {
+function GridToolbar() {
+  // state
+  const [objects, setObjects] = useState([]);
+  const [templates, setTemplates] = useState([]);
+  const [queries, setQueries] = useState([]);
+
+  const fields = {
+    value: "Id",
+    text: "Name",
+  };
+
+  const accounts = [
+    {
+      Id: 1,
+      Name: "Account",
+    },
+    {
+      Id: 2,
+      Name: "Contact",
+    },
+    {
+      Id: 3,
+      Name: "Case",
+    },
+  ];
+
+  const sportsData = ["Badminton", "Cricket", "Football", "Golf", "Tennis"];
+
   return (
     <Flex flexDir='column' alignItems='left' bg='#fff' color='#020202'>
       {/* selectors row */}
@@ -78,44 +108,51 @@ function gridToolbar() {
         </Flex>
 
         {/* Object selector */}
-        <Select
-          width='225'
-          size='sm'
-          fontSize='sm'
-          ml={8}
-          placeholder='Select object'
-        >
-          <option value='option1'>Accounts</option>
-          <option value='option2'>Contacts</option>
-          <option value='option3'>Leads</option>
-        </Select>
+        <Flex ml={10}>
+          <Select
+            id='objectSelector'
+            varient='unstyled'
+            placeHolder='Select object'
+            size='sm'
+            width={200}
+          >
+            <option value='Accounts'>Accounts</option>
+            <option value='Contacts'>Contacts</option>
+            <option value='Cases'>Cases</option>
+            <option Tasks='Tasks'>Tasks</option>
+            <option Events='option5'>Events</option>
+          </Select>
+        </Flex>
 
         {/* Template selector */}
-        <Select
-          width='225'
-          size='sm'
-          fontSize='sm'
-          ml={8}
-          placeholder='Select template'
-        >
-          <option value='option1'>Sales</option>
-          <option value='option2'>Support</option>
-          <option value='option3'>Finance</option>
-          <option value='option4'>Marketing</option>
-        </Select>
+        <Flex className='sidebar-items' ml={10}>
+          <Select
+            id='templateSelector'
+            varient='unstyled'
+            placeHolder='Select template'
+            size='sm'
+            width={200}
+          >
+            <option value='1'>Sales</option>
+            <option value='2'>Support</option>
+            <option value='3'>Finance</option>
+          </Select>
+        </Flex>
 
         {/* Query selector */}
-        <Select
-          width='225'
-          size='sm'
-          fontSize='sm'
-          ml={8}
-          placeholder='Select query'
-        >
-          <option value='option1'>Accounts</option>
-          <option value='option2'>Accnts by Industry</option>
-          <option value='option3'>Enterprise Accnts</option>
-        </Select>
+        <Flex className='sidebar-items' ml={10}>
+          <Select
+            id='querySelector'
+            varient='unstyled'
+            placeHolder='Select query'
+            size='sm'
+            width={200}
+          >
+            <option value='1'>All Accnts</option>
+            <option value='2'>Accnts by Industry</option>
+            <option value='3'>Enterprise Accnts</option>
+          </Select>
+        </Flex>
       </Flex>
 
       {/* // buttons row */}
@@ -172,4 +209,4 @@ function gridToolbar() {
   );
 }
 
-export default gridToolbar;
+export default GridToolbar;
