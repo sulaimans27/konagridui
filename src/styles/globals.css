@@ -45,3 +45,9 @@ a {
 .active-icon {
   color: #b57295 !important;
 }
+
+.select option {
+  background-color: green;
+  font-weight: bold;
+  color: red;
+}

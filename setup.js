@@ -1,6 +1,9 @@
 // navigate to parent directory and create project
 // npx create-react-app konagridui --template @chakra-ui/typescript
 
+// chakra-react-select
+// npm i chakra-react-select
+
 // react router
 // npm i react-router-dom --save
 

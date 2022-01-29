@@ -1,31 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
 
 import {
+  AsyncCreatableSelect,
+  AsyncSelect,
+  CreatableSelect,
+  Select,
+} from "chakra-react-select";
+
+import {
   Flex,
-  Heading,
-  Avatar,
-  AvatarGroup,
-  Text,
-  Icon,
-  IconButton,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Divider,
   Link,
   Box,
-  Button,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Select,
-  Stack,
+  HStack,
+  VStack,
   List,
+  Container,
 } from "@chakra-ui/react";
 
 import { MdPersonAdd } from "react-icons/md";
@@ -75,88 +66,134 @@ function GridToolbar() {
   const [templates, setTemplates] = useState([]);
   const [queries, setQueries] = useState([]);
 
-  const fields = {
-    value: "Id",
-    text: "Name",
-  };
+  // run once to get the objects
+  console.log("Ready to run Toolbar useEffect");
+  useEffect(() => {
+    console.log("Getting org objects");
+    // get users profile name from the store
+    let userInfo = {};
+    userInfo["profileName"] = "System Administrator";
 
-  const accounts = [
+    const payload = {
+      profileName: userInfo.profileName,
+    };
+
+    // get the org objects for the user's profile
+    const url = "/salesforce/sobjects";
+
+    fetch(url, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.status !== "ok") {
+          throw new Error("GridToolbar() - Error retriving org objects");
+        }
+
+        let orgObjects = result.records;
+
+        console.log(orgObjects);
+
+        // create object selector options
+        // [{ value: 123, text: 'Account'}, ...]
+        const options = [];
+        orgObjects.forEach((o) => {
+          const newOption = {
+            value: o.id,
+            label: o.value,
+          };
+          options.push(newOption);
+        });
+
+        console.log(options);
+
+        // update the objects state
+        console.log("Setting objects state");
+        setObjects(options);
+      })
+      .catch((err) => {
+        // ToDo = display error message
+        return;
+      });
+  }, []);
+
+  const templateData = [
     {
-      Id: 1,
-      Name: "Account",
+      label: "Sales",
+      value: "1",
     },
     {
-      Id: 2,
-      Name: "Contact",
+      label: "Support",
+      value: "2",
     },
     {
-      Id: 3,
-      Name: "Case",
+      label: "Finance",
+      value: "3",
     },
   ];
 
-  const sportsData = ["Badminton", "Cricket", "Football", "Golf", "Tennis"];
+  const queryData = [
+    {
+      label: "All Accnts",
+      value: "1",
+    },
+    {
+      label: "Accnts by Industry",
+      value: "2",
+    },
+    {
+      label: "Enterprise Accnts",
+      value: "3",
+    },
+  ];
+
+  const groupedOptions = [
+    {
+      label: "Objects",
+      options: objects,
+    },
+  ];
 
   return (
     <Flex flexDir='column' alignItems='left' bg='#fff' color='#020202'>
-      {/* selectors row */}
-      <Flex flexDir='row' alignItems='left' bg='#fff' color='#020202'>
-        {/* Apps icon */}
-        <Flex className='sidebar-items' mt={2}>
-          <Link as={MdApps} fontSize='1xl'></Link>
-          <Link _hover={{ textDecor: "none" }}></Link>
+      {/* row 0 */}
+      <Flex flexDir='row' alignItems='left' mt={5}>
+        <Flex mt={1}>
+          <Link as={MdApps} fontSize='2xl'></Link>
         </Flex>
 
-        {/* Object selector */}
-        <Flex ml={10}>
+        <Box w={275} ml='30'>
           <Select
-            id='objectSelector'
-            varient='unstyled'
-            placeHolder='Select object'
+            name='objectSelector'
+            className='chakra-react-select'
+            tagVarient='subtle'
+            placeholder='Select object'
             size='sm'
-            width={200}
-          >
-            <option value='Accounts'>Accounts</option>
-            <option value='Contacts'>Contacts</option>
-            <option value='Cases'>Cases</option>
-            <option Tasks='Tasks'>Tasks</option>
-            <option Events='option5'>Events</option>
-          </Select>
-        </Flex>
+            options={objects}
+          />
+        </Box>
 
-        {/* Template selector */}
-        <Flex className='sidebar-items' ml={10}>
-          <Select
-            id='templateSelector'
-            varient='unstyled'
-            placeHolder='Select template'
-            size='sm'
-            width={200}
-          >
-            <option value='1'>Sales</option>
-            <option value='2'>Support</option>
-            <option value='3'>Finance</option>
-          </Select>
-        </Flex>
-
-        {/* Query selector */}
-        <Flex className='sidebar-items' ml={10}>
-          <Select
-            id='querySelector'
-            varient='unstyled'
-            placeHolder='Select query'
-            size='sm'
-            width={200}
-          >
-            <option value='1'>All Accnts</option>
-            <option value='2'>Accnts by Industry</option>
-            <option value='3'>Enterprise Accnts</option>
-          </Select>
+        {/* template selector */}
+        <Flex flexDir='column'>
+          {/* template selector */}
+          <Box w={275} ml={132}>
+            <Select
+              name='templateSelector'
+              className='chakra-react-select'
+              tagVarient='subtle'
+              placeholder='Select template'
+              size='sm'
+              options={templateData}
+            />
+          </Box>
         </Flex>
       </Flex>
-
-      {/* // buttons row */}
-      <Flex flexDir='row' alignItems='left' bg='#fff' color='#020202'>
+      {/* row 1 */}
+      <Flex flexDir='row' alignItems='left' mt={5}>
         {/* Menu icon */}
         <Flex className='sidebar-items'>
           <Link as={MdFormatAlignJustify} fontSize='1xl'></Link>
@@ -204,6 +241,17 @@ function GridToolbar() {
           <Link as={BiChevronsRight} fontSize='1xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
+
+        {/* Query selector */}
+        <Box w={275} ml={20} mt={-1}>
+          <Select
+            name='querySelector'
+            tagVarient='subtle'
+            placeholder='Select query'
+            size='sm'
+            options={queryData}
+          />
+        </Box>
       </Flex>
     </Flex>
   );

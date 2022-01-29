@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
 // import AppRoutes from "../routes/routes";
 import { Flex } from "@chakra-ui/react";
 import {
@@ -25,6 +26,53 @@ import AppManagerView from "./appManagerView";
 import DemoDataView from "./demoDataView";
 
 export default function MainApp() {
+  // login to salesforce
+  const email = "jeffreykennedy@dts.com";
+  const pw = "3944Pine!!KlvlaJ75DPUNrGggtMHOsBvrc";
+  const url = "http://login.salesforce.com";
+
+  const [userInfo, setUserInfo] = useState({});
+
+  // runs once
+  useEffect(() => {
+    fetch(
+      `/salesforce/jsforce?userName=${email}&userPassword=${pw}&loginUrl=${url}`
+    )
+      .then((response) => response.json())
+      .then((isLoggedIn) => {
+        if (isLoggedIn.statusCode === 500) {
+          // ToDo - display error message
+          console.log("Error logging into Salesforce");
+          return;
+        }
+        // ToDo - display success toast message
+        console.log("Salesforce login successful");
+
+        const userInfo = {
+          userId: isLoggedIn.userId,
+          userName: email,
+          userPassword: pw,
+          loginUrl: url,
+          userEmail: isLoggedIn.userEmail,
+          organizationId: isLoggedIn.organizationId,
+          profileId: isLoggedIn.profileId,
+          profileName: isLoggedIn.profileName,
+          conn: isLoggedIn.conn,
+          locale: isLoggedIn.locale,
+          sessionId: isLoggedIn.sessionId,
+        };
+
+        console.log(userInfo);
+
+        // store user state
+        setUserInfo(userInfo);
+
+        // ToDo = store userInfo in global state
+      })
+      .catch((error) => {
+        console.log("Error logging into Salesforce");
+      });
+  }, []);
   return (
     // hidden allows component to scroll
     <Flex h='100vh' flexDir='row' overflow='hidden' maxW='2000px'>

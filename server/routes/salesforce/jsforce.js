@@ -21,7 +21,6 @@ module.exports = async function (fastify, options, next) {
       profileName: "",
       hostName: "",
       sessionId: "",
-      conn: null,
     };
 
     if (
@@ -92,5 +91,4 @@ module.exports = async function (fastify, options, next) {
   });
 
   next();
-}
-
+};
