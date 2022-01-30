@@ -1,20 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// sets related object state
 export const relatedObjectSlice = createSlice({
   name: "relatedObject",
   initialState: {
-    value: {
-      id: null,
-    },
+    relatedObject: null,
   },
   reducers: {
-    set: (state, action) => {
-      state.value = action.payload;
+    setRelatedObject: (state, { payload }) => {
+      state.relatedObject = payload;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { set } = relatedObjectSlice.actions;
+export const { setRelatedObject } = relatedObjectSlice.actions;
 
 export default relatedObjectSlice.reducer;

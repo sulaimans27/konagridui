@@ -1,20 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// sets selected query state
 export const querySlice = createSlice({
-  name: "selectedQuery",
+  name: "query",
   initialState: {
-    value: {
-      id: null,
-    },
+    query: null,
   },
   reducers: {
-    set: (state, action) => {
-      state.value = action.payload;
+    setQuery: (state, { payload }) => {
+      state.query = payload;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { set } = querySlice.actions;
+export const { setQuery } = querySlice.actions;
 
 export default querySlice.reducer;

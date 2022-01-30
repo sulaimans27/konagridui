@@ -1,4 +1,5 @@
 import "./styles/globals.css";
+import "./App.css";
 
 import MainApp from "./pages/mainapp";
 

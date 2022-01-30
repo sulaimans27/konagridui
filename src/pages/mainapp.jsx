@@ -24,6 +24,7 @@ import PivotView from "./pivotView";
 import SpreadsheetView from "./spreadsheetView";
 import AppManagerView from "./appManagerView";
 import DemoDataView from "./demoDataView";
+import { store } from "../store/store";
 
 export default function MainApp() {
   // login to salesforce
@@ -66,6 +67,9 @@ export default function MainApp() {
 
         // store user state
         setUserInfo(userInfo);
+
+        // store userInfo in global store
+        store.dispatch(userInfo(userInfo));
 
         // ToDo = store userInfo in global state
       })

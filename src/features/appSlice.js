@@ -1,21 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// sets selected app state
 export const appSlice = createSlice({
   name: "selectedApp",
   initialState: {
-    value: {
-      id: null,
-    },
+    selectedApp: null,
   },
   reducers: {
-    // Use the PayloadAction type to declare the contents of `action.payload`
-    set: (state, action) => {
-      state.value = action.payload;
+    setSelectedApp: (state, { payload }) => {
+      state.selectedApp = payload;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { set } = appSlice.actions;
+export const { setSelectedApp } = appSlice.actions;
 
 export default appSlice.reducer;

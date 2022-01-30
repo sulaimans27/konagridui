@@ -1,20 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// sets selected template state
 export const templateSlice = createSlice({
-  name: "selectedTemplate",
+  name: "template",
   initialState: {
-    value: {
-      id: null,
-    },
+    template: null,
   },
   reducers: {
-    set: (state, action) => {
-      state.value = action.payload;
+    setTemplate: (state, { payload }) => {
+      state.template = payload;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { set } = templateSlice.actions;
+export const { setTemplate } = templateSlice.actions;
 
 export default templateSlice.reducer;

@@ -9,16 +9,27 @@ import sidebarReducer from "../features/sidebarSlice";
 import socketReducer from "../features/socketSlice";
 import relatedObjectReducer from "../features/relatedObjectSlice";
 import relatedTemplateReducer from "../features/relatedTemplateSlice";
+import userInfoReducer from "../features/userInfoSlice";
+import objectListReducer from "../features/objectListSlice";
+import templateListReducer from "../features/templateListSlice";
+import queryListReducer from "../features/queryListSlice";
+import relatedTemplateListReducer from "../features/relatedTemplateListSlice";
 
 export const store = configureStore({
   reducer: {
     selectedApp: appReducer,
     metadataMap: metadataMapReducer,
-    selectedObject: selectedObjectReducer,
-    selectedTemplate: selectedTemplateReducer,
-    selectedQuery: selectedQueryReducer,
+    object: selectedObjectReducer,
+    template: selectedTemplateReducer,
+    query: selectedQueryReducer,
     relatedObject: relatedObjectReducer,
     relatedTemplate: relatedTemplateReducer,
+    objectList: objectListReducer,
+    templateList: templateListReducer,
+    queryList: queryListReducer,
+    relatedTemplateList: relatedTemplateListReducer,
+    userInfo: userInfoReducer,
     socket: socketReducer,
+    sidebarStatus: sidebarReducer,
   },
 });

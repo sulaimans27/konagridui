@@ -1,20 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// sets related template state
 export const relatedTemplateSlice = createSlice({
   name: "relatedTemplate",
   initialState: {
-    value: {
-      id: null,
-    },
+    relatedTemplate: null,
   },
   reducers: {
-    set: (state, action) => {
-      state.value = action.payload;
+    setRelatedTemplate: (state, { payload }) => {
+      state.relatedTemplate = payload;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { set } = relatedTemplateSlice.actions;
+export const { setRelatedTemplate } = relatedTemplateSlice.actions;
 
 export default relatedTemplateSlice.reducer;

@@ -1,21 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// sets socket state
 export const socketSlice = createSlice({
   name: "socket",
   initialState: {
-    value: {
-      id: null,
-    },
+    socket: null,
   },
   reducers: {
-    // Use the PayloadAction type to declare the contents of `action.payload`
-    set: (state, action) => {
-      state.value = action.payload;
+    setSocket: (state, { payload }) => {
+      state.socket = payload;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { set } = socketSlice.actions;
+export const { setSocket } = socketSlice.actions;
 
 export default socketSlice.reducer;

@@ -1,19 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const metadataMapSlice = createSlice({
-  name: "metadataMap",
+// sets metadata state
+export const metadataSlice = createSlice({
+  name: "metadata",
   initialState: {
-    value: {},
+    metadata: null,
   },
   reducers: {
-    // Use the PayloadAction type to declare the contents of `action.payload`
-    set: (state, action) => {
-      state.value = action.payload;
+    setMetadata: (state, { payload }) => {
+      state.metadata = payload;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { set } = metadataMapSlice.actions;
+export const { setMetadata } = metadataSlice.actions;
 
-export default metadataMapSlice.reducer;
+export default metadataSlice.reducer;

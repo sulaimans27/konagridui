@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
 
+// state management
+import { useDispatch } from "react-redux";
+import { setObject } from "../../features/objectSlice";
+import { setTemplate } from "../../features/templateSlice";
+import { setQuery } from "../../features/querySlice";
+
+import { store } from "../../store/store";
+
+import * as tb from "./gridToolbarFunctions";
+
 import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
 
 import {
@@ -61,7 +71,10 @@ import { BiFilterAlt } from "react-icons/bi";
 import { VscChecklist } from "react-icons/vsc";
 
 function GridToolbar() {
-  // state
+  // global state
+  const dispatch = useDispatch();
+
+  // selector options local state
   const [objects, setObjects] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [queries, setQueries] = useState([]);
@@ -70,9 +83,11 @@ function GridToolbar() {
   console.log("Ready to run Toolbar useEffect");
   useEffect(() => {
     console.log("Getting org objects");
+
     // get users profile name from the store
-    let userInfo = {};
-    userInfo["profileName"] = "System Administrator";
+    // let userInfo = {};
+    // userInfo["profileName"] = "System Administrator";
+    let userInfo = store.userInfo;
 
     const payload = {
       profileName: userInfo.profileName,
@@ -111,7 +126,7 @@ function GridToolbar() {
 
         console.log(options);
 
-        // update the objects state
+        // update the local state
         console.log("Setting objects state");
         setObjects(options);
       })
@@ -120,43 +135,6 @@ function GridToolbar() {
         return;
       });
   }, []);
-
-  const templateData = [
-    {
-      label: "Sales",
-      value: "1",
-    },
-    {
-      label: "Support",
-      value: "2",
-    },
-    {
-      label: "Finance",
-      value: "3",
-    },
-  ];
-
-  const queryData = [
-    {
-      label: "All Accnts",
-      value: "1",
-    },
-    {
-      label: "Accnts by Industry",
-      value: "2",
-    },
-    {
-      label: "Enterprise Accnts",
-      value: "3",
-    },
-  ];
-
-  const groupedOptions = [
-    {
-      label: "Objects",
-      options: objects,
-    },
-  ];
 
   return (
     <Flex flexDir='column' alignItems='left' bg='#fff' color='#020202'>
@@ -174,6 +152,18 @@ function GridToolbar() {
             placeholder='Select object'
             size='sm'
             options={objects}
+            onChange={(e) => {
+              let selectedObject = e.value;
+              tb.selectedObjectChanged(selectedObject).then((result) => {
+                if (result.status !== "ok") {
+                  // ToDo - alert user to error
+                  console.log(result.errorMessage);
+                  throw new Error(result.errorMessage);
+                }
+                // set template state and rerender
+                dispatch(setObject(result.records));
+              });
+            }}
           />
         </Box>
 
@@ -182,12 +172,21 @@ function GridToolbar() {
           {/* template selector */}
           <Box w={275} ml={132}>
             <Select
-              name='templateSelector'
+              id='templateSelector'
               className='chakra-react-select'
               tagVarient='subtle'
               placeholder='Select template'
               size='sm'
-              options={templateData}
+              options={templates}
+              onChange={(e) => {
+                let selectedTemplate = e.value;
+
+                // configure the grid columns
+                tb.selectedTemplateChanged(selectedTemplate);
+
+                // store selectedTemplate in global state
+                dispatch(setTemplate(selectedTemplate));
+              }}
             />
           </Box>
         </Flex>
@@ -249,7 +248,16 @@ function GridToolbar() {
             tagVarient='subtle'
             placeholder='Select query'
             size='sm'
-            options={queryData}
+            options={queries}
+            onChange={(e) => {
+              let selectedQuery = e.value;
+
+              // store selectedQuery in global state
+              dispatch(setQuery(selectedQuery));
+
+              // execute the query
+              tb.selectedQueryChanged(selectedQuery);
+            }}
           />
         </Box>
       </Flex>

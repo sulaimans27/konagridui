@@ -1,19 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// sets sidebar state
 export const sidebarSlice = createSlice({
-  name: "sidebarOpen",
+  name: "sidebarStatus",
   initialState: {
-    value: false,
+    sidebarStatus: true,
   },
   reducers: {
-    // Use the PayloadAction type to declare the contents of `action.payload`
-    set: (state, action) => {
-      state.value = action.payload;
+    setSidebarStatus: (state, { payload }) => {
+      state.sidebarStatus = payload;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { set } = sidebarSlice.actions;
+export const { setSidebarStatus } = sidebarSlice.actions;
 
 export default sidebarSlice.reducer;
