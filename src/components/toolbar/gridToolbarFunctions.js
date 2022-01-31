@@ -1,20 +1,118 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 // state management
-import { useDispatch } from "react-redux";
 import { setSelectedObject } from "../../features/objectSlice";
+
 import { setSelectedTemplate } from "../../features/templateSlice";
+
 import { setSelectedQuery } from "../../features/querySlice";
 
 import { store } from "../../store/store";
 
-// load template & query selector options
-export async function selectedObjectChanged({ selectedObject }) {
-  // get userInfo from store
-  let appState = store.getState();
-  let userInfo = appState.userInfo;
+// load query selector options
+export async function loadQuerySelectorOptions(selectedObject, userInfo) {
+  const url = "/postgres/knexSelect";
 
-  const url = "/api/knexSelect";
+  // get all columns
+  let columns = null;
+
+  // get the PUBLIC queries from the database
+  let values = {
+    object: selectedObject,
+    orgid: userInfo.organizationId,
+    is_public: true,
+    is_active: true,
+  };
+
+  let payload = {
+    table: "query",
+    columns: columns,
+    values: values,
+    rowIds: [],
+    idField: null,
+  };
+
+  try {
+    let response = await fetch(url, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(`loadQuerySelectorOptions() - ${response.message}`);
+    }
+
+    let result = await response.json();
+
+    if (result.status === "error") {
+      throw new Error(result.errorMessage);
+    }
+
+    let publicQueries = result.records;
+
+    // get the PRIVATE queries from the database
+    let privateValues = {
+      object: selectedObject,
+      orgid: userInfo.organizationId,
+      is_public: false,
+      is_active: true,
+    };
+
+    let privatePayload = {
+      table: "query",
+      columns: columns,
+      values: privateValues,
+      rowIds: [],
+      idField: null,
+    };
+
+    let privateResponse = await fetch(url, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(privatePayload),
+    });
+
+    if (!privateResponse.ok) {
+      throw new Error(
+        `loadQuerySelectorOptions() - ${privateResponse.message}`
+      );
+    }
+
+    let privateResult = await privateResponse.json();
+
+    if (privateResult.status === "error") {
+      throw new Error(result.errorMessage);
+    }
+
+    let privateQueries = privateResult.records;
+
+    let queries = [...publicQueries, ...privateQueries];
+
+    // set selectedQuery state
+
+    return {
+      status: "ok",
+      errorMessage: null,
+      records: queries,
+    };
+  } catch (error) {
+    return {
+      status: "error",
+      errorMessage: error.message,
+      records: [],
+    };
+  }
+}
+
+// load template selector options
+export async function selectedObjectChanged(selectedObject, userInfo) {
+  const url = "/postgres/knexSelect";
 
   // get all columns
   let columns = null;
@@ -27,9 +125,9 @@ export async function selectedObjectChanged({ selectedObject }) {
   let values = {
     object: selectedObject,
     orgid: userInfo.organizationId,
-    is_public: is_public,
-    is_active: is_active,
-    is_related: is_related,
+    is_public: true,
+    is_active: true,
+    is_related: false,
   };
 
   let payload = {
@@ -62,18 +160,33 @@ export async function selectedObjectChanged({ selectedObject }) {
     let publicTemplates = result.records;
 
     // get the PRIVATE templates from the database
-    values["is_public"] = false;
+    // get the PUBLIC templates from the database
+    let privateValues = {
+      object: selectedObject,
+      orgid: userInfo.organizationId,
+      is_public: false,
+      is_active: true,
+      is_related: false,
+    };
+
+    let privatePayload = {
+      table: "template",
+      columns: columns,
+      values: privateValues,
+      rowIds: [],
+      idField: null,
+    };
 
     let privateResponse = await fetch(url, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(privatePayload),
     });
 
     if (!privateResponse.ok) {
-      throw new Error(`selectedObjectChanged() - ${response.message}`);
+      throw new Error(`selectedObjectChanged() - ${privateResponse.message}`);
     }
 
     let privateResult = await privateResponse.json();
@@ -82,7 +195,7 @@ export async function selectedObjectChanged({ selectedObject }) {
       throw new Error(result.errorMessage);
     }
 
-    let privateTemplates = result.records;
+    let privateTemplates = privateResult.records;
 
     let templates = [...publicTemplates, ...privateTemplates];
 
@@ -101,7 +214,22 @@ export async function selectedObjectChanged({ selectedObject }) {
 }
 
 // configure the grid columns
-export async function selectedTemplateChanged({ selectedTemplate }) {}
+export async function selectedTemplateChanged({ selectedTemplate }) {
+  // ToDo = create Grid columns
+  // ToDo - run query if selectedQuery !== ''
+  return {
+    status: "ok",
+    errorMessage: null,
+    records: [],
+  };
+}
 
 // execute query
-export async function selectedQueryChanged({ selectedTemplate }) {}
+export async function selectedQueryChanged({ selectedQuery }) {
+  // ToDo - run query
+  return {
+    status: "ok",
+    errorMessage: null,
+    records: [],
+  };
+}

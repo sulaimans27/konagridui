@@ -7,7 +7,8 @@ export const objectListSlice = createSlice({
     objectList: null,
   },
   reducers: {
-    setObject: (state, { payload }) => {
+    setObjectList: (state, { payload }) => {
+      // state.objectList = [];
       state.objectList = payload;
     },
   },

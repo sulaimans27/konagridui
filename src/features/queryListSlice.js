@@ -4,10 +4,11 @@ import { createSlice } from "@reduxjs/toolkit";
 export const queryListSlice = createSlice({
   name: "queryList",
   initialState: {
-    templateList: null,
+    queryList: null,
   },
   reducers: {
     setQueryList: (state, { payload }) => {
+      // state.queryList = [];
       state.queryList = payload;
     },
   },

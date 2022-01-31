@@ -1,18 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// {selectedObject: { selectedObject: 'some object'}}}
+
 // sets selected object state
 export const objectSlice = createSlice({
-  name: "object",
+  name: "selectedObject",
   initialState: {
-    object: null,
+    selectedObject: null,
   },
   reducers: {
-    setObject: (state, { payload }) => {
-      state.object = payload;
+    setSelectedObject: (state, { payload }) => {
+      state.selectedObject = payload;
     },
   },
 });
 
-export const { setObject } = objectSlice.actions;
+export const { setSelectedObject } = objectSlice.actions;
 
 export default objectSlice.reducer;

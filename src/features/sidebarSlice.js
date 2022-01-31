@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const sidebarSlice = createSlice({
   name: "sidebarStatus",
   initialState: {
-    sidebarStatus: true,
+    sidebarStatus: null,
   },
   reducers: {
     setSidebarStatus: (state, { payload }) => {

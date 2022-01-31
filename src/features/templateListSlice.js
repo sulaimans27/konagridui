@@ -7,7 +7,8 @@ export const templateListSlice = createSlice({
     templateList: null,
   },
   reducers: {
-    setObject: (state, { payload }) => {
+    setTemplateList: (state, { payload }) => {
+      // state.templateList = [];
       state.templateList = payload;
     },
   },

@@ -4,11 +4,11 @@ import { createSlice } from "@reduxjs/toolkit";
 export const relatedTemplateListSlice = createSlice({
   name: "templateList",
   initialState: {
-    relatedTemplateList: null,
+    templateList: null,
   },
   reducers: {
     setRelatedTemplateList: (state, { payload }) => {
-      state.relatedTemplateList = payload;
+      state.templateList = payload;
     },
   },
 });

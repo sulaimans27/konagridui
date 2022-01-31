@@ -4,7 +4,7 @@ module.exports = async function (fastify, options, next) {
       var conn = fastify.conn;
 
       const payload = request.body;
-      const userProfile = payload.profileName;
+      const userProfile = payload.userInfo.profileName;
 
       // get the org metadata using describeGlobal
       let results = await conn.describeGlobal();

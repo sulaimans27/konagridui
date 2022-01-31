@@ -2,17 +2,17 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // sets selected query state
 export const querySlice = createSlice({
-  name: "query",
+  name: "selectedQuery",
   initialState: {
-    query: null,
+    selectedQuery: null,
   },
   reducers: {
-    setQuery: (state, { payload }) => {
-      state.query = payload;
+    setSelectedQuery: (state, { payload }) => {
+      state.selectedQuery = payload;
     },
   },
 });
 
-export const { setQuery } = querySlice.actions;
+export const { setSelectedQuery } = querySlice.actions;
 
 export default querySlice.reducer;

@@ -7,7 +7,7 @@
 // react router
 // npm i react-router-dom --save
 
-// install React toolkit
+// install React toolkit & Chrome React debugger
 // npm install @reduxjs/toolkit react-redux
 
 // Fastify
