@@ -5,11 +5,23 @@ import { useDispatch, useSelector } from "react-redux";
 // Syncfusion components
 import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
 import { ToastUtility } from "@syncfusion/ej2-react-notifications";
+import { setQueryBuilderVisible } from "../../features/queryBuilderVisabilitySlice";
+import { setSidebarSize } from "../../features/sidebarSizeSlice";
+
+import {
+  ColumnDirective,
+  ColumnsDirective,
+  GridComponent,
+} from "@syncfusion/ej2-react-grids";
+
+import { setGridData } from "../../features/gridDataSlice";
 
 // state management
 import { setObjectList } from "../../features/objectListSlice";
 
 import { setTemplateList } from "../../features/templateListSlice";
+
+import { setTemplateFieldList } from "../../features/templateFieldListSlice";
 
 import { setQueryList } from "../../features/queryListSlice";
 
@@ -28,56 +40,22 @@ import {
   Select,
 } from "chakra-react-select";
 
-import {
-  Flex,
-  Link,
-  Box,
-  HStack,
-  VStack,
-  List,
-  Container,
-} from "@chakra-ui/react";
+import { Flex, Link, Box } from "@chakra-ui/react";
 
-import { MdPersonAdd } from "react-icons/md";
-import { MdViewColumn } from "react-icons/md";
-import { MdFormatAlignJustify } from "react-icons/md";
-import { MdEdit } from "react-icons/md";
-import { MdGridOn } from "react-icons/md";
-import { MdPalette } from "react-icons/md";
-import { MdRemoveRedEye } from "react-icons/md";
-import { MdApps } from "react-icons/md";
-import { MdArrowBack } from "react-icons/md";
-import { MdArrowForward } from "react-icons/md";
-import { MdCheck } from "react-icons/md";
-import { MdClose } from "react-icons/md";
-import { MdMoreHoriz } from "react-icons/md";
-import { MdDateRange } from "react-icons/md";
-import { MdDone } from "react-icons/md";
-import { MdFavorite } from "react-icons/md";
-import { MdFavoriteBorder } from "react-icons/md";
-import { MdHome } from "react-icons/md";
-import { MdShoppingCart } from "react-icons/md";
-import { MdEqualizer } from "react-icons/md";
-import { MdReplay } from "react-icons/md";
-import { MdSearch } from "react-icons/md";
-import { MdAdd } from "react-icons/md";
-import { MdClear } from "react-icons/md";
-import { MdContentCut } from "react-icons/md";
-import { MdContentCopy } from "react-icons/md";
-import { MdAccessAlarms } from "react-icons/md";
-import { MdPieChartOutlined } from "react-icons/md";
-import { BiCalendar } from "react-icons/bi";
-import { BiData } from "react-icons/bi";
-import { BiTask } from "react-icons/bi";
-import { BiLineChart } from "react-icons/bi";
-import { BiSpreadsheet } from "react-icons";
-import { BiShapeSquare } from "react-icons/bi";
-import { BiChevronsRight } from "react-icons/bi";
-import { BiChevronsLeft } from "react-icons/bi";
-import { BiCut } from "react-icons/bi";
-import { DiFirebase } from "react-icons/di";
-import { BiFilterAlt } from "react-icons/bi";
-import { VscChecklist } from "react-icons/vsc";
+// bi icons
+import * as Bi from "react-icons/bi";
+
+// di icons
+import * as Di from "react-icons/di";
+
+// feather icons
+import * as Fi from "react-icons/fi";
+
+// material icons
+import * as Mi from "react-icons/md";
+
+// vsc icons
+import * as Vsc from "react-icons/vsc";
 
 function GridToolbar() {
   const objectSelector = useRef(null);
@@ -138,7 +116,7 @@ function GridToolbar() {
   let userInfo = useSelector((state) => state.userInfo.userInfo);
 
   const selectedObject = useSelector(
-    (state) => state.selectedObject.setSelectedObject
+    (state) => state.selectedObject.selectedObject
   );
   const selectedTemplate = useSelector(
     (state) => state.selectedTemplate.selectedTemplate
@@ -165,12 +143,9 @@ function GridToolbar() {
   // query fields mapping
   let queryFieldsMap = { text: "name", value: "id" };
 
-  // run once to get the objects
-  console.log("Ready to run Toolbar useEffect");
-
   // objects
   useEffect(() => {
-    if (!hasOrgObjects.current && userInfo) {
+    if (!selectedObject && userInfo) {
       console.log("Getting org objects");
 
       const payload = {
@@ -198,27 +173,44 @@ function GridToolbar() {
 
           hasUserInfo.current = true;
 
+          console.log("Setting selected object state");
+          dispatch(setSelectedObject(result.records[0]));
+
           // update the global state && set the object selector to the first value
           if (result.records.length > 0) {
-            console.log("Setting objects state");
+            console.log("Setting object options state");
             dispatch(setObjectList(result.records));
-            dispatch(setSelectedObject(result.records[0]));
-            objectSelector.value = result.records[0];
           }
         })
         .catch((err) => {
-          // ToDo = display error message
+          showToast(
+            "Error retrieving org objects",
+            err.message,
+            "Error!",
+            0,
+            true
+          );
+          console.log(err.message);
           return;
         });
     }
-  }, [dispatch, userInfo]);
+  }, [dispatch, showToast, userInfo, selectedObject]);
+
+  // queryBuilderView visibility state
+  let queryBuilderVisible = useSelector(
+    (state) => state.queryBuilderVisible.queryBuilderVisible
+  );
+
+  // Sidebar size state
+  let sidebarSize = useSelector((state) => state.sidebarSize.sidebarSize);
 
   return (
     <Flex flexDir='column' alignItems='left' bg='#fff' color='#020202'>
       {/* row 0 */}
       <Flex flexDir='row' alignItems='left' mt={5}>
+        {/* apps selector */}
         <Flex mt={1}>
-          <Link as={MdApps} fontSize='2xl'></Link>
+          <Link as={Fi.FiMenu} fontSize='1xl'></Link>
         </Flex>
 
         <Box w={275} ml='30'>
@@ -229,9 +221,11 @@ function GridToolbar() {
             placeholder='Select object'
             dataSource={objectOptions}
             onChange={(e) => {
+              console.log("Selected object changed");
               let selectedObject = e.value;
 
               // load template selector options
+              console.log("Loading template selector options");
               tb.selectedObjectChanged(selectedObject, userInfo).then(
                 (result) => {
                   if (result.status !== "ok") {
@@ -247,22 +241,24 @@ function GridToolbar() {
                     return;
                   }
                   // set selectedObject state
+                  console.log("Storing selected object state");
                   dispatch(setSelectedObject(selectedObject));
 
-                  // store template option state
                   console.log("Displaying template options");
                   console.log(result.records);
 
+                  // storing template options state
+                  console.log("Storing template options state");
                   dispatch(setTemplateList(result.records));
 
                   // set the template selector to the first value
                   if (result.records.length > 0) {
-                    // templateSelector.current.state.value = options[0];
                   }
                 }
               );
 
               // load query selector options
+              console.log("Loading query options");
               tb.loadQuerySelectorOptions(selectedObject, userInfo).then(
                 (result) => {
                   if (result.status !== "ok") {
@@ -277,23 +273,15 @@ function GridToolbar() {
                     return;
                   }
 
-                  // prepare query options list
-                  const queryOptions = [];
-                  // result.records.forEach((t) => {
-                  //   const newOption = {
-                  //     value: t.id,
-                  //     label: t.name,
-                  //   };
-                  //   options.push(newOption);
-                  // });
-
                   // store query option state
                   console.log("Displaying query options");
                   console.log(result.records);
+
+                  console.log("Storing query options state");
                   dispatch(setQueryList(result.records));
 
                   // set the query selector to the first value
-                  if (queryOptions.length > 0) {
+                  if (result.records.length > 0) {
                     // templateSelector.current.state.value = options[0];
                   }
                 }
@@ -305,7 +293,7 @@ function GridToolbar() {
         {/* template selector */}
         <Flex flexDir='column'>
           {/* template selector */}
-          <Box w={275} ml={182}>
+          <Box w={275} ml={146}>
             <DropDownListComponent
               name='templateSelector'
               ref={templateSelector}
@@ -313,27 +301,40 @@ function GridToolbar() {
               placeholder='Select template'
               dataSource={templateOptions}
               onChange={(e) => {
+                console.log("Selected template changed");
                 let selectedTemplate = e.value;
 
                 // configure the grid columns
-                tb.selectedTemplateChanged(selectedTemplate, userInfo).then(
-                  (result) => {
-                    if (result.status !== "ok") {
-                      showToast(
-                        "Error retrieving query templates",
-                        result.errorMessage,
-                        "Error!",
-                        0,
-                        true
-                      );
-                      console.log(result.errorMessage);
-                      return;
-                    }
-
-                    // store selectedTemplate in global state
-                    dispatch(setSelectedTemplate(selectedTemplate));
+                tb.SelectedTemplateChanged(
+                  selectedObject,
+                  selectedTemplate,
+                  userInfo
+                ).then((result) => {
+                  if (result.status !== "ok") {
+                    showToast(
+                      "Error retrieving template fields",
+                      result.errorMessage,
+                      "Error!",
+                      0,
+                      true
+                    );
+                    console.log(result.errorMessage);
+                    return;
                   }
-                );
+
+                  const templateFields = result.records;
+
+                  // store selectedTemplate in global state
+                  console.log("Storing selected template state");
+                  dispatch(setSelectedTemplate(selectedTemplate));
+
+                  console.log("Displaying template fields");
+                  console.log(result.records);
+
+                  // store template fields in global state
+                  console.log("Storing template options state");
+                  dispatch(setTemplateFieldList(templateFields));
+                });
               }}
             />
           </Box>
@@ -343,56 +344,81 @@ function GridToolbar() {
       <Flex flexDir='row' alignItems='left' mt={5}>
         {/* Menu icon */}
         <Flex className='sidebar-items'>
-          <Link as={MdFormatAlignJustify} fontSize='1xl'></Link>
+          <Link
+            as={Fi.FiMenu}
+            fontSize='1xl'
+            onClick={() => {
+              // toggle query builder visibility
+              if (sidebarSize === "small") {
+                dispatch(setSidebarSize("large"));
+              } else {
+                dispatch(setSidebarSize("small"));
+              }
+              // console.log(
+              //   `Search button clicked - visiblility is ${!queryBuilderVisible}`
+              // );
+            }}
+          ></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Search icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={MdSearch} fontSize='1xl'></Link>
+          <Link
+            as={Mi.MdSearch}
+            fontSize='1xl'
+            onClick={() => {
+              // toggle query builder visibility
+              if (sidebarSize === "small") {
+                dispatch(setSidebarSize("large"));
+              } else {
+                dispatch(setSidebarSize("small"));
+              }
+            }}
+          ></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Filter icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={BiFilterAlt} fontSize='1xl'></Link>
+          <Link as={Bi.BiFilterAlt} fontSize='1xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Save icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={MdCheck} fontSize='1xl'></Link>
+          <Link as={Mi.MdCheck} fontSize='1xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Add icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={MdAdd} fontSize='1xl'></Link>
+          <Link as={Mi.MdAdd} fontSize='1xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Delete icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={MdClear} fontSize='1xl'></Link>
+          <Link as={Mi.MdClear} fontSize='1xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Preferences icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={MdFavoriteBorder} fontSize='1xl'></Link>
+          <Link as={Mi.MdFavoriteBorder} fontSize='1xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Relationships icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={BiChevronsRight} fontSize='1xl'></Link>
+          <Link as={Bi.BiChevronsRight} fontSize='1xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Shopping Cart icon */}
         <Flex className='sidebar-items' ml={5}>
           <Link
-            as={MdShoppingCart}
+            as={Mi.MdShoppingCart}
             fontSize='1xl'
             onClick={() => {
               // test toast
@@ -417,13 +443,39 @@ function GridToolbar() {
             placeholder='Select query'
             dataSource={queryOptions}
             onChange={(e) => {
+              console.log("Selected query changed");
               let selectedQuery = e.value;
 
               // store selectedQuery in global state
+              console.log("Storing selectedQuery state");
               dispatch(setSelectedQuery(selectedQuery));
 
               // execute the query
-              tb.selectedQueryChanged(selectedQuery);
+              console.log("Executing selectedQueryChanged");
+              tb.SelectedQueryChanged(selectedObject, selectedQuery).then(
+                (result) => {
+                  if (result.status !== "ok") {
+                    showToast(
+                      "Error retrieving query templates",
+                      result.errorMessage,
+                      "Error!",
+                      0,
+                      true
+                    );
+                    console.log(result.errorMessage);
+                    return;
+                  }
+
+                  const queryResult = result.records[0];
+
+                  console.log("Displaying query results");
+                  console.log(queryResult);
+
+                  // store query results in global state
+                  console.log("Storing query results state");
+                  dispatch(setGridData(queryResult));
+                }
+              );
             }}
           />
         </Box>

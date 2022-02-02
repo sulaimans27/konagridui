@@ -8,7 +8,62 @@ import { setSelectedTemplate } from "../../features/templateSlice";
 
 import { setSelectedQuery } from "../../features/querySlice";
 
-import { store } from "../../store/store";
+import { setGridData } from "../../features/gridDataSlice";
+
+// get template fields
+export async function getTemplateFields(selectedTemplate) {
+  const url = "/postgres/knexSelect";
+
+  // get all columns
+  let columns = null;
+
+  // get the template fields from the database
+  let values = {
+    templateid: selectedTemplate,
+  };
+
+  let payload = {
+    table: "template_field",
+    columns: columns,
+    values: values,
+    rowIds: [],
+    idField: null,
+  };
+
+  try {
+    let response = await fetch(url, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(`getTemplateFields() - ${response.message}`);
+    }
+
+    let result = await response.json();
+
+    if (result.status === "error") {
+      throw new Error(result.errorMessage);
+    }
+
+    let templateFields = result.records;
+
+    return {
+      status: "ok",
+      errorMessage: null,
+      records: templateFields,
+    };
+  } catch (error) {
+    return {
+      status: "error",
+      errorMessage: error.message,
+      records: [],
+    };
+  }
+}
 
 // load query selector options
 export async function loadQuerySelectorOptions(selectedObject, userInfo) {
@@ -214,22 +269,78 @@ export async function selectedObjectChanged(selectedObject, userInfo) {
 }
 
 // configure the grid columns
-export async function selectedTemplateChanged({ selectedTemplate }) {
-  // ToDo = create Grid columns
+export async function SelectedTemplateChanged(
+  selectedObject,
+  selectedTemplate,
+  userInfo
+) {
+  // ToDo = get template fields and store in global state
   // ToDo - run query if selectedQuery !== ''
+  console.log("Getting template fields");
+  const result = await getTemplateFields(selectedTemplate);
+
+  if (result.status === "error") {
+    return {
+      status: "error",
+      errorMessage: result.errorMessage,
+      records: [],
+    };
+  }
+
+  console.log("Returning template fields");
+
   return {
     status: "ok",
     errorMessage: null,
-    records: [],
+    records: result.records,
   };
 }
 
 // execute query
-export async function selectedQueryChanged({ selectedQuery }) {
-  // ToDo - run query
-  return {
-    status: "ok",
-    errorMessage: null,
-    records: [],
+export async function SelectedQueryChanged(selectedObject, selectedQuery) {
+  const url = "/salesforce/querySearch";
+
+  const payload = {
+    objName: selectedObject,
+    relatedObjName: null,
+    relationName: null,
+    parentObjName: null,
+    parentRecordId: null,
+    lookupField: null,
+    searchString: null,
+    socketId: null,
+    gridId: null,
   };
+
+  try {
+    let response = await fetch(url, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(`SelectedQueryChanged() - ${response.message}`);
+    }
+
+    let result = await response.json();
+
+    if (result.status === "error") {
+      throw new Error(result.errorMessage);
+    }
+
+    return {
+      status: "ok",
+      errorMessage: null,
+      records: result.records,
+    };
+  } catch (error) {
+    return {
+      status: "error",
+      errorMessage: error.message,
+      records: [],
+    };
+  }
 }

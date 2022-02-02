@@ -764,7 +764,7 @@ module.exports = async function (fastify, options, next) {
           throw new Error(referenceResult.errorMessage);
         }
 
-        let referenceFieldsArray = result.records;
+        let referenceFieldsArray = referenceResult.records;
 
         // add fields to select clause
         for (let i = 0; i < referenceFieldsArray.length; i++) {
@@ -1037,5 +1037,4 @@ module.exports = async function (fastify, options, next) {
   });
 
   next();
-}
-
+};

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserInfo } from "../features/userInfoSlice";
 
 // import AppRoutes from "../routes/routes";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import {
   BrowserRouter,
   Link as RouteLink,
@@ -11,7 +11,7 @@ import {
   Route,
 } from "react-router-dom";
 
-import Sidebar from "../components/sidebar/sidebar";
+import Sidebar from "../components/sidebar/Sidebar";
 import GridToolbar from "../components/toolbar/gridToolbar";
 import Grid from "../components/grid/grid";
 
@@ -30,6 +30,8 @@ import { store } from "../store/store";
 
 export default function MainApp() {
   const dispatch = useDispatch();
+
+  const sidebarSize = useSelector((state) => state.sidebarSize.sidebarSize);
 
   // login to salesforce
   const email = "jeffreykennedy@dts.com";
@@ -75,36 +77,43 @@ export default function MainApp() {
         console.log("Error logging into Salesforce");
       });
   });
+
   return (
     // hidden allows component to scroll
-    <Flex h='100vh' flexDir='row' overflow='hidden' maxW='2000px'>
-      {/* Column 1 - Sidebar */}
+    <Flex flexDirection='column' alignItems='flex-start'>
       <Flex
-        w='12%'
-        flexDir='column'
+        h='40px'
+        w='100%'
+        backgroundColor='blue.600'
+        color='white'
+        justifyContent='flex-start'
         alignItems='center'
-        bg='#020202'
-        color='#fff'
       >
-        <Sidebar />
+        <Text ml={10}>KonaGrid</Text>
       </Flex>
+      <Flex flexDirection='row' h='95%'>
+        {/* Column 1 - Sidebar */}
+        <Flex h='100vh' alignItems='flex-start' padding={10}>
+          <Sidebar />
+        </Flex>
 
-      {/* Column 2 - Main */}
-      {/* overflow enables horizontal scrolling */}
-      <Flex w='88%' p='1%' flexDir='column' overflow='auto' h='100vh'>
-        <Routes>
-          <Route path='/grid' exact element={<GridView />} />
-          <Route path='/login' element={<LoginView />} />
-          <Route path='/templates' element={<TemplateManagerView />} />
-          <Route path='/queries' element={<QueryManagerView />} />
-          <Route path='/kanban' element={<KanbanView />} />
-          <Route path='/gantt' element={<GanttView />} />
-          <Route path='/scheduler' element={<SchedulerView />} />
-          <Route path='/pivot' element={<PivotView />} />
-          <Route path='/spreadsheet' element={<SpreadsheetView />} />
-          <Route path='/appmgr' element={<AppManagerView />} />
-          <Route path='/demodata' element={<DemoDataView />} />
-        </Routes>
+        {/* Column 2 - Main */}
+        {/* overflow enables horizontal scrolling */}
+        <Flex w='88%' p='1%' flexDir='column' overflow='auto' h='100vh'>
+          <Routes>
+            <Route path='/grid' exact element={<GridView />} />
+            <Route path='/login' element={<LoginView />} />
+            <Route path='/templates' element={<TemplateManagerView />} />
+            <Route path='/queries' element={<QueryManagerView />} />
+            <Route path='/kanban' element={<KanbanView />} />
+            <Route path='/gantt' element={<GanttView />} />
+            <Route path='/scheduler' element={<SchedulerView />} />
+            <Route path='/pivot' element={<PivotView />} />
+            <Route path='/spreadsheet' element={<SpreadsheetView />} />
+            <Route path='/appmgr' element={<AppManagerView />} />
+            <Route path='/demodata' element={<DemoDataView />} />
+          </Routes>
+        </Flex>
       </Flex>
     </Flex>
   );

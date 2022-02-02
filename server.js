@@ -80,18 +80,6 @@ fastify.decorate("superagent", {
   },
 });
 
-//registering the static file plugin so we can
-// serve the index.html page
-// if (NODE_ENV === "production")
-//   fastify.register(require("fastify-static"), {
-//     root: path.join(__dirname, "build"),
-//   });
-// else {
-//   fastify.register(require("fastify-static"), {
-//     root: path.join(__dirname, "public"),
-//   });
-// }
-
 fastify.register(require("fastify-static"), {
   root: path.join(__dirname, "build"),
 });

@@ -20,15 +20,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-
-// ReactDOM.render(
-//   <React.StrictMode>
-//     <BrowserRouter>
-//       <Provider store={store}>
-//         <ColorModeScript />
-//         <App />
-//       </Provider>
-//     </BrowserRouter>
-//   </React.StrictMode>,
-//   document.getElementById("root")
-// );
