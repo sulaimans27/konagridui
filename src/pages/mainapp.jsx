@@ -93,7 +93,7 @@ export default function MainApp() {
       </Flex>
       <Flex flexDirection='row' h='95%'>
         {/* Column 1 - Sidebar */}
-        <Flex h='100vh' alignItems='flex-start' padding={10}>
+        <Flex h='100%' alignItems='flex-start' ml={5} mr={5}>
           <Sidebar />
         </Flex>
 

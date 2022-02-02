@@ -51,6 +51,10 @@ import * as Di from "react-icons/di";
 // feather icons
 import * as Fi from "react-icons/fi";
 
+// IO icons
+// import * as Io from "react-icons/io5";
+import { IoMdApps } from "react-icons/io";
+
 // material icons
 import * as Mi from "react-icons/md";
 
@@ -210,7 +214,7 @@ function GridToolbar() {
       <Flex flexDir='row' alignItems='left' mt={5}>
         {/* apps selector */}
         <Flex mt={1}>
-          <Link as={Fi.FiMenu} fontSize='1xl'></Link>
+          <Link as={IoMdApps} fontSize='25px'></Link>
         </Flex>
 
         <Box w={275} ml='30'>
