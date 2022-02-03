@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import appReducer from "../features/appSlice";
 import columnsReducer from "../features/columnsSlice";
 import filterSettingsReducer from "../features/filterSettingsSlice";
 import gridDataReducer from "../features/gridDataSlice";
@@ -16,6 +15,7 @@ import relatedSortSettingsReducer from "../features/relatedSortSettingsSlice";
 import relatedObjectReducer from "../features/relatedObjectSlice";
 import relatedTemplateListReducer from "../features/relatedTemplateListSlice";
 import relatedTemplateReducer from "../features/relatedTemplateSlice";
+import selectedAppReducer from "../features/selectedAppSlice";
 import selectedObjectReducer from "../features/objectSlice";
 import selectedQueryReducer from "../features/querySlice";
 import selectedTemplateReducer from "../features/templateSlice";
@@ -28,12 +28,12 @@ import userInfoReducer from "../features/userInfoSlice";
 
 export const store = configureStore({
   reducer: {
-    metadataMap: metadataMapReducer,
     columns: columnsReducer,
     filterSettings: filterSettingsReducer,
     gridData: gridDataReducer,
     groupSettings: groupSettingsReducer,
     metadata: metadataMapReducer,
+    metadataMap: metadataMapReducer,
     objectList: objectListReducer,
     query: selectedQueryReducer,
     queryList: queryListReducer,
@@ -45,7 +45,7 @@ export const store = configureStore({
     relatedSortSettings: relatedSortSettingsReducer,
     relatedTemplate: relatedTemplateReducer,
     relatedTemplateList: relatedTemplateListReducer,
-    selectedApp: appReducer,
+    selectedApp: selectedAppReducer,
     selectedObject: selectedObjectReducer,
     selectedTemplate: selectedTemplateReducer,
     selectedQuery: selectedQueryReducer,

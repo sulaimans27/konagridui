@@ -12,6 +12,8 @@ import {
 
 import { setSidebarSize } from "../../features/sidebarSizeSlice";
 
+import { setSelectedApp } from "../../features/selectedAppSlice";
+
 // bi icons
 import * as Bi from "react-icons/bi";
 
@@ -42,15 +44,15 @@ export default function Sidebar() {
   // get size from global this.state
   const sidebarSize = useSelector((state) => state.sidebarSize.sidebarSize);
 
+  // get active view from global state
+  const selectedApp = useSelector((state) => state.selectedApp.selectedApp);
+
   return (
     <Flex
       flexDir='column'
       borderRadius={2}
       w={sidebarSize === "small" ? "60px" : "200px"}
       justifyContent='space-between'
-      borderStyle='solid'
-      borderColor='blue.600'
-      borderWidth={2}
       padding={4}
       mt={5}
     >
@@ -59,14 +61,25 @@ export default function Sidebar() {
         as='nav'
         flexDir='column'
         alignItems={sidebarSize === "small" ? "center" : "flex-start"}
+        paddingRight={4}
       >
         <Text id='appTitle' color='blue.600' mt={5}>
           Apps
         </Text>
 
-        <NavItem icon={Mi.MdGridOn} title='Grid' />
+        <NavItem
+          icon={Mi.MdGridOn}
+          title='Grid'
+          className={selectedApp === "grid" ? "active-icon" : null}
+          onClick={() => dispatch(setSelectedApp("grid"))}
+        />
 
-        <NavItem icon={Mi.MdRemoveRedEye} title='Templates' />
+        <NavItem
+          icon={Mi.MdRemoveRedEye}
+          title='Templates'
+          className={selectedApp === "templates" ? "active-icon" : null}
+          onClick={() => dispatch(setSelectedApp("templates"))}
+        />
 
         <NavItem icon={Mi.MdSearch} title='Queries' />
 

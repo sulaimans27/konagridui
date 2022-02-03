@@ -2,6 +2,8 @@ import React from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
+import { setSelectedApp } from "../../features/selectedAppSlice";
+
 import { Link as RouteLink } from "react-router-dom";
 
 import {
@@ -18,6 +20,10 @@ function NavItem({ icon, title, active }) {
   // get size from global this.state
   const sidebarSize = useSelector((state) => state.sidebarSize.sidebarSize);
 
+  // get active view from global state
+  const selectedApp = useSelector((state) => state.selectedApp.selectedApp);
+
+  const dispatch = useDispatch();
   return (
     <Flex
       mt={30}
@@ -29,10 +35,10 @@ function NavItem({ icon, title, active }) {
         <Link
           as={RouteLink}
           to={`/${title}`}
-          backgroundColor={active && "#AEC8CA"}
+          // backgroundColor={active && "#AEC8CA"}
           pt={3}
           borderRadius={8}
-          _hover={{ textDecor: "none", backgroundColor: "#AEC8CA" }}
+          // _hover={{ textDecor: "none", backgroundColor: "#AEC8CA" }}
           w={sidebarSize === "large" && "100%"}
         >
           <MenuButton w='100%'>

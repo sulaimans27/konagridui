@@ -27,6 +27,7 @@ import SpreadsheetView from "./spreadsheetView";
 import AppManagerView from "./appManagerView";
 import DemoDataView from "./demoDataView";
 import { store } from "../store/store";
+import { BiCalculator } from "react-icons/bi";
 
 export default function MainApp() {
   const dispatch = useDispatch();
@@ -80,9 +81,9 @@ export default function MainApp() {
 
   return (
     // hidden allows component to scroll
-    <Flex flexDirection='column' alignItems='flex-start'>
+    <Flex flexDirection='column' alignItems='flex-start' h='100vh' w='100vw'>
       <Flex
-        h='40px'
+        h='4%'
         w='100%'
         backgroundColor='blue.600'
         color='white'
@@ -91,15 +92,20 @@ export default function MainApp() {
       >
         <Text ml={10}>KonaGrid</Text>
       </Flex>
-      <Flex flexDirection='row' h='95%'>
+      <Flex flexDirection='row' w='100%' h='96%'>
         {/* Column 1 - Sidebar */}
-        <Flex h='100%' alignItems='flex-start' ml={5} mr={5}>
+        <Flex
+          alignItems='flex-start'
+          ml={5}
+          mr={5}
+          borderRight='3px solid #2B6CB0'
+        >
           <Sidebar />
         </Flex>
 
         {/* Column 2 - Main */}
         {/* overflow enables horizontal scrolling */}
-        <Flex w='88%' p='1%' flexDir='column' overflow='auto' h='100vh'>
+        <Flex p='1%' flexDir='column' overflow='auto' w='100%' h='97%'>
           <Routes>
             <Route path='/grid' exact element={<GridView />} />
             <Route path='/login' element={<LoginView />} />

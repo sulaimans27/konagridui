@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // sets selected app state
-export const appSlice = createSlice({
+export const selectedAppSlice = createSlice({
   name: "selectedApp",
   initialState: {
     selectedApp: null,
@@ -13,6 +13,6 @@ export const appSlice = createSlice({
   },
 });
 
-export const { setSelectedApp } = appSlice.actions;
+export const { setSelectedApp } = selectedAppSlice.actions;
 
-export default appSlice.reducer;
+export default selectedAppSlice.reducer;
