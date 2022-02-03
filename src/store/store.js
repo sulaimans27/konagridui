@@ -16,6 +16,7 @@ import relatedObjectReducer from "../features/relatedObjectSlice";
 import relatedTemplateListReducer from "../features/relatedTemplateListSlice";
 import relatedTemplateReducer from "../features/relatedTemplateSlice";
 import selectedAppReducer from "../features/selectedAppSlice";
+import selectedAppTitleReducer from "../features/selectedAppTitleSlice";
 import selectedObjectReducer from "../features/objectSlice";
 import selectedQueryReducer from "../features/querySlice";
 import selectedTemplateReducer from "../features/templateSlice";
@@ -46,6 +47,7 @@ export const store = configureStore({
     relatedTemplate: relatedTemplateReducer,
     relatedTemplateList: relatedTemplateListReducer,
     selectedApp: selectedAppReducer,
+    selectedAppTitle: selectedAppTitleReducer,
     selectedObject: selectedObjectReducer,
     selectedTemplate: selectedTemplateReducer,
     selectedQuery: selectedQueryReducer,

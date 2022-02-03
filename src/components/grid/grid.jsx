@@ -81,7 +81,8 @@ function DataGrid() {
       <GridComponent
         dataSource={gridData}
         allowPaging={true}
-        pageSettings={pageSettings}
+        // pageSettings={pageSettings}
+        allowPaging={false}
         filterSettings={filterSettings}
         allowFiltering={true}
         allowSorting={true}

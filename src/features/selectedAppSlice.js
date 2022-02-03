@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const selectedAppSlice = createSlice({
   name: "selectedApp",
   initialState: {
-    selectedApp: null,
+    selectedApp: "grid",
   },
   reducers: {
     setSelectedApp: (state, { payload }) => {

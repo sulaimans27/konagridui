@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+// state hooks
 import { setUserInfo } from "../features/userInfoSlice";
+import { setSelectedApp } from "../features/selectedAppSlice";
+import { setSelectedAppTitle } from "../features/selectedAppTitleSlice";
 
 // import AppRoutes from "../routes/routes";
 import { Flex, Text } from "@chakra-ui/react";
@@ -11,7 +15,8 @@ import {
   Route,
 } from "react-router-dom";
 
-import Sidebar from "../components/sidebar/Sidebar";
+import Sidebar from "../components/sidebar/sidebar";
+import Banner from "../components/banner/banner";
 import GridToolbar from "../components/toolbar/gridToolbar";
 import Grid from "../components/grid/grid";
 
@@ -32,7 +37,11 @@ import { BiCalculator } from "react-icons/bi";
 export default function MainApp() {
   const dispatch = useDispatch();
 
+  // global state
   const sidebarSize = useSelector((state) => state.sidebarSize.sidebarSize);
+  const selectedAppTitle = useSelector(
+    (state) => state.selectedAppTitle.selectedAppTitle
+  );
 
   // login to salesforce
   const email = "jeffreykennedy@dts.com";
@@ -80,20 +89,12 @@ export default function MainApp() {
   });
 
   return (
-    // hidden allows component to scroll
     <Flex flexDirection='column' alignItems='flex-start' h='100vh' w='100vw'>
-      <Flex
-        h='4%'
-        w='100%'
-        backgroundColor='blue.600'
-        color='white'
-        justifyContent='flex-start'
-        alignItems='center'
-      >
-        <Text ml={10}>KonaGrid</Text>
-      </Flex>
+      {/* banner */}
+      <Banner />
+
+      {/* Column 1 - Sidebar & GridView */}
       <Flex flexDirection='row' w='100%' h='96%'>
-        {/* Column 1 - Sidebar */}
         <Flex
           alignItems='flex-start'
           ml={5}
@@ -105,7 +106,7 @@ export default function MainApp() {
 
         {/* Column 2 - Main */}
         {/* overflow enables horizontal scrolling */}
-        <Flex p='1%' flexDir='column' overflow='auto' w='100%' h='97%'>
+        <Flex p='1%' flexDir='column' overflow='scroll' w='100%' h='96%'>
           <Routes>
             <Route path='/grid' exact element={<GridView />} />
             <Route path='/login' element={<LoginView />} />

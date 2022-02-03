@@ -15,13 +15,13 @@ export default function GridView() {
   // let queryViewVisible = true;
 
   return (
-    <Flex w='85%' p='1%' flexDir='column' overflow='auto' h='100vh'>
+    <Flex w='85%' p='1%' flexDir='column' overflow='auto' h='97%'>
       <Flex>
         <GridToolbar />
       </Flex>
       <Flex
         flexDir={"column"}
-        display={queryBuilderVisible}
+        display={queryBuilderVisible === true ? "inline-block" : "none"}
         borderColor={"blue.600"}
         borderWidth={2}
       >

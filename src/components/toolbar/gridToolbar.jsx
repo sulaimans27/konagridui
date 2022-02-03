@@ -370,13 +370,13 @@ function GridToolbar() {
         <Flex className='sidebar-items' ml={5}>
           <Link
             as={Mi.MdSearch}
-            fontSize='1xl'
+            fontSize='2xl'
             onClick={() => {
               // toggle query builder visibility
-              if (sidebarSize === "small") {
-                dispatch(setSidebarSize("large"));
+              if (queryBuilderVisible === false) {
+                dispatch(setQueryBuilderVisible(true));
               } else {
-                dispatch(setSidebarSize("small"));
+                dispatch(setQueryBuilderVisible(false));
               }
             }}
           ></Link>
@@ -385,37 +385,37 @@ function GridToolbar() {
 
         {/* Filter icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={Bi.BiFilterAlt} fontSize='1xl'></Link>
+          <Link as={Bi.BiFilterAlt} fontSize='2xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Save icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={Mi.MdCheck} fontSize='1xl'></Link>
+          <Link as={Mi.MdCheck} fontSize='2xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Add icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={Mi.MdAdd} fontSize='1xl'></Link>
+          <Link as={Mi.MdAdd} fontSize='2xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Delete icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={Mi.MdClear} fontSize='1xl'></Link>
+          <Link as={Mi.MdClear} fontSize='2xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Preferences icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={Mi.MdFavoriteBorder} fontSize='1xl'></Link>
+          <Link as={Mi.MdFavoriteBorder} fontSize='2xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
         {/* Relationships icon */}
         <Flex className='sidebar-items' ml={5}>
-          <Link as={Bi.BiChevronsRight} fontSize='1xl'></Link>
+          <Link as={Bi.BiChevronsRight} fontSize='2xl'></Link>
           <Link _hover={{ textDecor: "none" }}></Link>
         </Flex>
 
@@ -423,7 +423,7 @@ function GridToolbar() {
         <Flex className='sidebar-items' ml={5}>
           <Link
             as={Mi.MdShoppingCart}
-            fontSize='1xl'
+            fontSize='2xl'
             onClick={() => {
               // test toast
               showToast(
@@ -439,7 +439,7 @@ function GridToolbar() {
         </Flex>
 
         {/* Query selector */}
-        <Box w={275} ml={20} mt={-1}>
+        <Box w={275} ml={172} mt={-1}>
           <DropDownListComponent
             name='querySelector'
             ref={querySelector}

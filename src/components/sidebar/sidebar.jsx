@@ -11,8 +11,8 @@ import {
 } from "@chakra-ui/react";
 
 import { setSidebarSize } from "../../features/sidebarSizeSlice";
-
 import { setSelectedApp } from "../../features/selectedAppSlice";
+import { setSelectedAppTitle } from "../../features/selectedAppTitleSlice";
 
 // bi icons
 import * as Bi from "react-icons/bi";
@@ -47,6 +47,11 @@ export default function Sidebar() {
   // get active view from global state
   const selectedApp = useSelector((state) => state.selectedApp.selectedApp);
 
+  // get active view title from global state
+  const selectedAppTitle = useSelector(
+    (state) => state.selectedAppTitle.selectedAppTitle
+  );
+
   return (
     <Flex
       flexDir='column'
@@ -67,35 +72,115 @@ export default function Sidebar() {
           Apps
         </Text>
 
+        {/* grid */}
         <NavItem
           icon={Mi.MdGridOn}
-          title='Grid'
+          linkTitle='Grid'
+          bannerTitle='KonaGrid'
           className={selectedApp === "grid" ? "active-icon" : null}
-          onClick={() => dispatch(setSelectedApp("grid"))}
+          onClick={() => {
+            dispatch(setSelectedApp("grid"));
+          }}
         />
 
+        {/* templates */}
         <NavItem
           icon={Mi.MdRemoveRedEye}
-          title='Templates'
+          linkTitle='Templates'
+          bannerTitle='KonaGrid - Template Manager'
           className={selectedApp === "templates" ? "active-icon" : null}
-          onClick={() => dispatch(setSelectedApp("templates"))}
+          onClick={() => {
+            dispatch(setSelectedApp("templates"));
+          }}
         />
 
-        <NavItem icon={Mi.MdSearch} title='Queries' />
+        {/* search */}
+        <NavItem
+          icon={Mi.MdSearch}
+          linkTitle='Queries'
+          bannerTitle='KonaGrid - Query Manager'
+          className={selectedApp === "templates" ? "active-icon" : null}
+          onClick={() => {
+            dispatch(setSelectedApp("queries"));
+          }}
+        />
 
-        <NavItem icon={Bi.BiShapeSquare} title='Gantt' />
+        {/* gantt */}
+        <NavItem
+          icon={Bi.BiShapeSquare}
+          linkTitle='Gantt'
+          bannerTitle='KonaGrid - Gantt'
+          className={selectedApp === "templates" ? "active-icon" : null}
+          onClick={() => {
+            dispatch(setSelectedApp("gantt"));
+          }}
+        />
 
-        <NavItem icon={Vsc.VscChecklist} title='Kanban' />
+        {/* kanban */}
+        <NavItem
+          icon={Vsc.VscChecklist}
+          linkTitle='Kanban'
+          bannerTitle='KonaGrid - Kanban'
+          className={selectedApp === "kanban" ? "active-icon" : null}
+          onClick={() => {
+            dispatch(setSelectedApp("kanban"));
+          }}
+        />
 
-        <NavItem icon={Mi.MdAccessAlarms} title='Scheduler' />
+        {/* scheduler */}
+        <NavItem
+          icon={Mi.MdAccessAlarms}
+          linkTitle='Scheduler'
+          bannerTitle='KonaGrid - Scheduler'
+          className={selectedApp === "scheduler" ? "active-icon" : null}
+          onClick={() => {
+            dispatch(setSelectedApp("scheduler"));
+          }}
+        />
 
-        <NavItem icon={Bi.BiLineChart} title='Pivot' />
+        {/* pivot */}
+        <NavItem
+          icon={Bi.BiLineChart}
+          linkTitle='Pivot'
+          bannerTitle='KonaGrid - Pivot'
+          className={selectedApp === "pivot" ? "active-icon" : null}
+          onClick={() => {
+            dispatch(setSelectedApp("pivot"));
+          }}
+        />
 
-        <NavItem icon={Bi.BiSpreadsheet} title='Spreadsheet' />
+        {/* spreadsheet */}
+        <NavItem
+          icon={Bi.BiSpreadsheet}
+          linkTitle='Spreadsheet'
+          bannerTitle='KonaGrid - Spreadsheet'
+          className={selectedApp === "spreadsheet" ? "active-icon" : null}
+          onClick={() => {
+            dispatch(setSelectedApp("spreadsheet"));
+          }}
+        />
 
-        <NavItem icon={Mi.MdApps} title='App Mgr' />
+        {/* app manager */}
+        <NavItem
+          icon={Mi.MdApps}
+          linkTitle='App Mgr'
+          bannerTitle='KonaGrid - App Manager'
+          className={selectedApp === "appmgr" ? "active-icon" : null}
+          onClick={() => {
+            dispatch(setSelectedApp("appmgr"));
+          }}
+        />
 
-        <NavItem icon={Bi.BiData} title='Demo Data' />
+        {/* demo data */}
+        <NavItem
+          icon={Bi.BiData}
+          linkTitle='Demo Data'
+          bannerTitle='KonaGrid - Demo Data'
+          className={selectedApp === "demodata" ? "active-icon" : null}
+          onClick={() => {
+            dispatch(setSelectedApp("demodata"));
+          }}
+        />
       </Flex>
     </Flex>
   );

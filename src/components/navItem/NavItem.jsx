@@ -15,8 +15,9 @@ import {
   MenuButton,
   MenuList,
 } from "@chakra-ui/react";
+import { setSelectedAppTitle } from "../../features/selectedAppTitleSlice";
 
-function NavItem({ icon, title, active }) {
+function NavItem({ icon, linkTitle, bannerTitle, active }) {
   // get size from global this.state
   const sidebarSize = useSelector((state) => state.sidebarSize.sidebarSize);
 
@@ -34,12 +35,15 @@ function NavItem({ icon, title, active }) {
       <Menu placement='right'>
         <Link
           as={RouteLink}
-          to={`/${title}`}
+          to={`/${linkTitle}`}
           // backgroundColor={active && "#AEC8CA"}
           pt={3}
           borderRadius={8}
           // _hover={{ textDecor: "none", backgroundColor: "#AEC8CA" }}
           w={sidebarSize === "large" && "100%"}
+          onClick={() => {
+            dispatch(setSelectedAppTitle(bannerTitle));
+          }}
         >
           <MenuButton w='100%'>
             <Flex>
@@ -49,7 +53,7 @@ function NavItem({ icon, title, active }) {
                 color={active ? "#82AAAD" : "gray.500"}
               />
               <Text ml={5} display={sidebarSize === "small" ? "none" : "flex"}>
-                {title}
+                {linkTitle}
               </Text>
             </Flex>
           </MenuButton>
