@@ -27,7 +27,7 @@ function NavItem({ icon, linkTitle, bannerTitle, active }) {
   const dispatch = useDispatch();
   return (
     <Flex
-      mt={30}
+      mt={3}
       flexDir='column'
       w='100%'
       alignItems={sidebarSize === "small" ? "center" : "flex-start"}

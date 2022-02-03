@@ -15,7 +15,7 @@ export default function GridView() {
   // let queryViewVisible = true;
 
   return (
-    <Flex w='85%' p='1%' flexDir='column' overflow='auto' h='97%'>
+    <Flex w='85%' p='1%' flexDir='column' overflow='auto' h='96%'>
       <Flex>
         <GridToolbar />
       </Flex>
@@ -25,7 +25,7 @@ export default function GridView() {
         borderColor={"blue.600"}
         borderWidth={2}
       >
-        <Flex ml={2} mt={1} color={"blue.600"} fontSize='sm'>
+        <Flex ml={3} mt={2} mb={2} color={"blue.600"} fontSize='sm'>
           <label>QueryBuilder</label>
         </Flex>
         <Flex>

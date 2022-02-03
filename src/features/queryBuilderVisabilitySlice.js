@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const queryBuilderVisabilitySlice = createSlice({
   name: "queryBuilderVisible",
   initialState: {
-    queryBuilderVisible: "none",
+    queryBuilderVisible: false,
   },
   reducers: {
     setQueryBuilderVisible: (state, { payload }) => {

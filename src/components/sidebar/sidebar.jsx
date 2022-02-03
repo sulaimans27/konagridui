@@ -57,9 +57,8 @@ export default function Sidebar() {
       flexDir='column'
       borderRadius={2}
       w={sidebarSize === "small" ? "60px" : "200px"}
-      justifyContent='space-between'
+      justifyContent='flex-start'
       padding={4}
-      mt={5}
     >
       {/* nav items */}
       <Flex
