@@ -3,22 +3,31 @@ import { useSelector, useDispatch } from "react-redux";
 
 // import gridData from "./sampleGridData";
 
-import { GridField } from "./gridFunctions";
+import { gridField } from "./gridFunctions";
 
 import {
+  ColumnChooser,
   ColumnDirective,
   ColumnsDirective,
+  ColumnMenu,
+  Edit,
+  ExcelExport,
   Filter,
+  FilterSettingsModel,
+  ForeignKey,
+  Inject,
   GridComponent,
   Group,
-} from "@syncfusion/ej2-react-grids";
-
-import {
-  Inject,
+  GroupSettingsModel,
   Page,
   PageSettingsModel,
+  PdfExport,
+  Resize,
+  Reorder,
   Sort,
   SortSettingsModel,
+  Toolbar,
+  ToolbarItems,
 } from "@syncfusion/ej2-react-grids";
 
 function DataGrid() {
@@ -26,73 +35,106 @@ function DataGrid() {
 
   let pageSettings = { pageSize: 25 };
 
-  // get grid state
-  let sortSettings = useSelector((state) => state.selectedObject.sortSettings);
+  // store grid columns
+  const gridColumns = useRef(null);
 
+  // get filter state
   let filterSettings = useSelector(
     (state) => state.filterSettings.filterSettings
   );
 
-  let groupSettings = useSelector((state) => state.groupSettings.groupSettings);
-
-  let selectedObject = useSelector(
-    (state) => state.selectedObject.selectedObject
-  );
-
-  let selectedTemplate = useSelector(
-    (state) => state.selectedTemplate.selectedTemplate
-  );
-
-  let selectedQuery = useSelector((state) => state.selectedQuery.selectedQuery);
-
-  let templateFields = useSelector(
-    (state) => state.templateFieldList.templateFieldList
-  );
-
+  // get grid data
   let gridData = useSelector((state) => state.gridData.gridData);
 
+  // get group state
+  let groupSettings = useSelector((state) => state.groupSettings.groupSettings);
+
+  // get metadata
   const metadata = useSelector((state) => state.metadata.metadata);
   let metadataFields = null;
   if (metadata) {
     metadataFields = metadata.get(selectedObject);
   }
 
-  // const mainGridColumns = useSelector(state => state.mainGridColumns.mainGridColumns)
-  // const gridData = useSelector(state => state.gridData.gridData)
+  // get selected object state
+  let selectedObject = useSelector(
+    (state) => state.selectedObject.selectedObject
+  );
+
+  // get selected template state
+  let selectedTemplate = useSelector(
+    (state) => state.selectedTemplate.selectedTemplate
+  );
+
+  // get selected query state
+  let selectedQuery = useSelector((state) => state.selectedQuery.selectedQuery);
+
+  // get sort state
+  let sortSettings = useSelector((state) => state.selectedObject.sortSettings);
+
+  // get template fields
+  let templateFields = useSelector(
+    (state) => state.templateFields.templateFields
+  );
+
+  // create grid columns when selectedTemplate changes
+  useEffect(() => {
+    if (templateFields) {
+      const cols = [];
+      templateFields.forEach((t) => {
+        const col = gridField(t);
+        cols.push(col);
+      });
+      gridColumns.current = cols;
+    } else {
+      gridColumns.current = [];
+    }
+  });
 
   let hasTemplateFields = useRef(false);
   let userInfo = useSelector((state) => state.userInfo.userInfo);
 
-  if (
-    selectedObject !== null &&
-    selectedTemplate !== null &&
-    selectedQuery !== null &&
-    templateFields !== null &&
-    templateFields.length > 0 &&
-    gridData !== null
-  ) {
+  if (gridColumns && gridData) {
     console.log("Rendering grid with columns");
     console.log(`Selected object >> ${selectedObject}`);
     console.log(`Selected template >> ${selectedTemplate}`);
     console.log(`Selected query >> ${selectedQuery}`);
-    console.log("Template fields >>");
+    console.log(`Grid columns >> ${gridColumns}`);
     console.log(templateFields);
     return (
       <GridComponent
-        dataSource={gridData}
-        allowPaging={true}
-        // pageSettings={pageSettings}
         allowPaging={false}
-        filterSettings={filterSettings}
+        allowExcelExport={true}
         allowFiltering={true}
+        allowGrouping={true}
+        allowPdfExport={true}
         allowSorting={true}
+        allowReordering={true}
+        allowResizing={true}
+        columns={gridColumns.current}
+        dataSource={gridData}
+        filterSettings={filterSettings}
+        pageSettings={pageSettings}
+        showColumnMenu={true}
         sortSettings={sortSettings}
       >
-        {templateFields.map((field) => {
-          return <GridField key={field.id} item={field} />;
-        })}
-
-        <Inject services={[Page, Sort, Filter, Group]} />
+        <Inject
+          services={[
+            ColumnChooser,
+            ColumnMenu,
+            Edit,
+            ExcelExport,
+            Filter,
+            ForeignKey,
+            Group,
+            // Page,
+            PdfExport,
+            Resize,
+            Reorder,
+            Sort,
+            Toolbar,
+          ]}
+        />
       </GridComponent>
     );
   } else {
@@ -100,19 +142,7 @@ function DataGrid() {
     console.log(`Selected object >> ${selectedObject}`);
     console.log(`Selected template >> ${selectedTemplate}`);
     console.log(`Selected query >> ${selectedQuery}`);
-    return (
-      <GridComponent
-        allowPaging={true}
-        pageSettings={pageSettings}
-        filterSettings={filterSettings}
-        allowFiltering={true}
-        allowSorting={true}
-        sortSettings={sortSettings}
-      >
-        <ColumnsDirective></ColumnsDirective>
-        <Inject services={[Page, Sort, Filter, Group]} />
-      </GridComponent>
-    );
+    return <GridComponent></GridComponent>;
   }
 }
 

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ColumnDirective } from "@syncfusion/ej2-react-grids";
 
 // state management
 import { setSelectedObject } from "../../features/objectSlice";
 
-import { setSelectedTemplate } from "../../features/templateSlice";
+import { setSelectedTemplate } from "../../features/selectedTemplateSlice";
 
 import { setSelectedQuery } from "../../features/querySlice";
 
@@ -265,6 +266,212 @@ export async function selectedObjectChanged(selectedObject, userInfo) {
       errorMessage: error.message,
       records: [],
     };
+  }
+}
+
+export function GridField(field) {
+  const sfdcDataType = field.datatype;
+  switch (sfdcDataType) {
+    case "boolean": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "comboBox": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "currency": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Right'
+        />
+      );
+    }
+    case "date": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "datetime": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "decimal": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Right'
+        />
+      );
+    }
+    case "double": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Right'
+        />
+      );
+    }
+    case "email": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "encryptedstring": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "id": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "int": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "long": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "percent": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "phone": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "picklist": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "reference": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "string": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "textArea": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    case "url": {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='150'
+          textAlign='Left'
+        />
+      );
+    }
+    default: {
+      return (
+        <ColumnDirective
+          field={field.Name}
+          headerText={field.Name}
+          width='100'
+          textAlign='Right'
+        />
+      );
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // sets selected template state
-export const templateSlice = createSlice({
+export const selectedTemplateSlice = createSlice({
   name: "selectedTemplate",
   initialState: {
     selectedTemplate: null,
@@ -13,6 +13,6 @@ export const templateSlice = createSlice({
   },
 });
 
-export const { setSelectedTemplate } = templateSlice.actions;
+export const { setSelectedTemplate } = selectedTemplateSlice.actions;
 
-export default templateSlice.reducer;
+export default selectedTemplateSlice.reducer;

@@ -11,7 +11,7 @@ import { createSlice } from "@reduxjs/toolkit";
 */
 
 // sets main grid columns state
-export const columnsSlice = createSlice({
+export const gridColumnsSlice = createSlice({
   name: "gridColumns",
   initialState: {
     gridColumns: null,
@@ -23,6 +23,6 @@ export const columnsSlice = createSlice({
   },
 });
 
-export const { setGridColumns } = columnsSlice.actions;
+export const { setGridColumns } = gridColumnsSlice.actions;
 
-export default columnsSlice.reducer;
+export default gridColumnsSlice.reducer;

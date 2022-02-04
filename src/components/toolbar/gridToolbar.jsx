@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import * as ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import * as tbFunc from "./gridToolbarFunctions";
+
 // Syncfusion components
 import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
 import { ToastUtility } from "@syncfusion/ej2-react-notifications";
@@ -21,15 +23,17 @@ import { setObjectList } from "../../features/objectListSlice";
 
 import { setTemplateList } from "../../features/templateListSlice";
 
-import { setTemplateFieldList } from "../../features/templateFieldListSlice";
+import { setTemplateFields } from "../../features/templateFieldsSlice";
 
 import { setQueryList } from "../../features/queryListSlice";
 
 import { setSelectedObject } from "../../features/objectSlice";
 
-import { setSelectedTemplate } from "../../features/templateSlice";
+import { setSelectedTemplate } from "../../features/selectedTemplateSlice";
 
 import { setSelectedQuery } from "../../features/querySlice";
+
+import { setGridColumns } from "../../features/gridColumnsSlice";
 
 import * as tb from "./gridToolbarFunctions";
 
@@ -328,16 +332,13 @@ function GridToolbar() {
 
                   const templateFields = result.records;
 
+                  // store template fields in global state
+                  console.log("Storing template fields state");
+                  dispatch(setTemplateFields(templateFields));
+
                   // store selectedTemplate in global state
                   console.log("Storing selected template state");
                   dispatch(setSelectedTemplate(selectedTemplate));
-
-                  console.log("Displaying template fields");
-                  console.log(result.records);
-
-                  // store template fields in global state
-                  console.log("Storing template options state");
-                  dispatch(setTemplateFieldList(templateFields));
                 });
               }}
             />
@@ -439,7 +440,7 @@ function GridToolbar() {
         </Flex>
 
         {/* Query selector */}
-        <Box w={275} ml={172} mt={-1}>
+        <Box w={275} ml={108} mt={-1}>
           <DropDownListComponent
             name='querySelector'
             ref={querySelector}
