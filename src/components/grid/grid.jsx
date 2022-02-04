@@ -36,7 +36,7 @@ function DataGrid() {
   let pageSettings = { pageSize: 25 };
 
   // store grid columns
-  const gridColumns = useRef(null);
+  let gridColumns = useRef(null);
 
   // get filter state
   let filterSettings = useSelector(
@@ -79,7 +79,7 @@ function DataGrid() {
 
   // create grid columns when selectedTemplate changes
   useEffect(() => {
-    if (templateFields) {
+    if (templateFields !== null && templateFields.length > 0) {
       const cols = [];
       templateFields.forEach((t) => {
         const col = gridField(t);
@@ -89,6 +89,10 @@ function DataGrid() {
     } else {
       gridColumns.current = [];
     }
+
+    return () => {
+      gridColumns = null;
+    };
   });
 
   let hasTemplateFields = useRef(false);
@@ -127,7 +131,7 @@ function DataGrid() {
             Filter,
             ForeignKey,
             Group,
-            // Page,
+            Page,
             PdfExport,
             Resize,
             Reorder,
