@@ -29,6 +29,11 @@ import {
 } from "@syncfusion/ej2-react-grids";
 
 function DataGrid() {
+  // get component reference
+  let id = "mainGrid";
+
+  let gridObj = GridComponent;
+
   let toastMsg = useRef(null);
 
   function showToast(title, content, type, timeout, showCloseButton) {
@@ -137,6 +142,10 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "boolean",
+            editType: "checkbox",
+            autoFit: true,
+            displayAsCheckBox: true,
             width: "150",
             textAlign: "Left",
           };
@@ -145,6 +154,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "string",
+            editType: "dropdownlist",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -153,6 +165,10 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "number",
+            editType: "numerictextbox",
+            autoFit: true,
+            format: "C2",
             width: "150",
             textAlign: "Left",
           };
@@ -161,6 +177,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "date",
+            editType: "datepicker",
+            autoFit: true,
             width: "150",
             textAlign: "Right",
             format: "yMd",
@@ -170,6 +189,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "datetime",
+            editType: "datepicker",
+            autoFit: true,
             width: "150",
             textAlign: "Right",
             format: "yMd",
@@ -179,6 +201,10 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "number",
+            editType: "numerictextbox",
+            autoFit: true,
+            format: "C2",
             width: "150",
             textAlign: "Left",
           };
@@ -187,6 +213,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "number",
+            editType: "numerictextbox",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -195,6 +224,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "string",
+            editType: "textbox",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -203,6 +235,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "string",
+            editType: "textbox",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -211,6 +246,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "string",
+            editType: "textbox",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -219,6 +257,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "number",
+            editType: "numerictextbox",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -227,6 +268,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "number",
+            editType: "numerictextbox",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -235,14 +279,21 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "number",
+            editType: "numerictextbox",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
+            format: "P1",
           };
         }
         case "phone": {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "string",
+            editType: "textbox",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -251,6 +302,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "string",
+            editType: "dropdownlist",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -275,6 +329,9 @@ function DataGrid() {
                 ? `${relation}.Name`
                 : templateField.Name,
             headerText: fieldLabel,
+            type: "string",
+            editType: "textbox",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -283,6 +340,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "string",
+            editType: "textbox",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -291,6 +351,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "string",
+            editType: "textbox",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -299,6 +362,9 @@ function DataGrid() {
           return {
             field: templateField.name,
             headerText: fieldLabel,
+            type: "string",
+            editType: "textbox",
+            autoFit: true,
             width: "150",
             textAlign: "Left",
           };
@@ -444,11 +510,12 @@ function DataGrid() {
     console.log(`Selected object >> ${selectedObject}`);
     console.log(`Selected template >> ${selectedTemplate}`);
     console.log(`Selected query >> ${selectedQuery}`);
-    console.log(`Grid columns >> ${gridColumns}`);
-    console.log(templateFields);
     return (
       <GridComponent
+        allowAdding={true}
+        allowDeleting={true}
         allowPaging={false}
+        allowEditing={true}
         allowExcelExport={true}
         allowFiltering={true}
         allowGrouping={true}
@@ -458,10 +525,26 @@ function DataGrid() {
         allowResizing={true}
         columns={gridColumns.current}
         dataSource={gridData}
+        enableStickyHeader={true}
         filterSettings={filterSettings}
         pageSettings={pageSettings}
         showColumnMenu={true}
         sortSettings={sortSettings}
+        ref={(GridComponent) => (gridObj = GridComponent)}
+        dataBound={(e) => {
+          const columns = gridObj.columns;
+
+          // create array of column names
+          const columnNameArr = [];
+          gridColumns.current.forEach((c) => {
+            columnNameArr.push(c.field);
+          });
+
+          // convert to string
+          let gridColumnNames = columnNameArr.join(", ");
+
+          gridObj.autoFitColumns();
+        }}
       >
         <Inject
           services={[

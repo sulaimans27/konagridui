@@ -15,7 +15,7 @@ export default function GridView() {
   // let queryViewVisible = true;
 
   return (
-    <Flex w='85%' p='1%' flexDir='column' overflow='auto' h='96%'>
+    <Flex w='85%' p='1%' flexDir='column' h='96%'>
       <Flex>
         <GridToolbar />
       </Flex>
@@ -33,8 +33,8 @@ export default function GridView() {
         </Flex>
       </Flex>
 
-      <Flex mt={8}>
-        <Grid />
+      <Flex mt={8} h='100%' w='100%' overflow='auto'>
+        <Grid h='100%' w='100%' />
       </Flex>
     </Flex>
   );
