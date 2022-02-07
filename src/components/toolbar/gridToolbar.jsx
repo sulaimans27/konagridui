@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
-import * as ReactDOM from "react-dom";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import * as tbFunc from "./gridToolbarFunctions";
@@ -9,12 +8,6 @@ import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
 import { ToastUtility } from "@syncfusion/ej2-react-notifications";
 import { setQueryBuilderVisible } from "../../features/queryBuilderVisabilitySlice";
 import { setSidebarSize } from "../../features/sidebarSizeSlice";
-
-import {
-  ColumnDirective,
-  ColumnsDirective,
-  GridComponent,
-} from "@syncfusion/ej2-react-grids";
 
 import { setGridData } from "../../features/gridDataSlice";
 
@@ -27,7 +20,7 @@ import { setTemplateFields } from "../../features/templateFieldsSlice";
 
 import { setQueryList } from "../../features/queryListSlice";
 
-import { setSelectedObject } from "../../features/objectSlice";
+import { setSelectedObject } from "../../features/selectedObjectSlice";
 
 import { setSelectedTemplate } from "../../features/selectedTemplateSlice";
 
@@ -35,35 +28,27 @@ import { setSelectedQuery } from "../../features/querySlice";
 
 import { setGridColumns } from "../../features/gridColumnsSlice";
 
-import * as tb from "./gridToolbarFunctions";
-
-import {
-  AsyncCreatableSelect,
-  AsyncSelect,
-  CreatableSelect,
-  Select,
-} from "chakra-react-select";
-
 import { Flex, Link, Box } from "@chakra-ui/react";
 
 // bi icons
 import * as Bi from "react-icons/bi";
 
 // di icons
-import * as Di from "react-icons/di";
+// import * as Di from "react-icons/di";
 
 // feather icons
 import * as Fi from "react-icons/fi";
 
 // IO icons
-// import * as Io from "react-icons/io5";
 import { IoMdApps } from "react-icons/io";
 
 // material icons
 import * as Mi from "react-icons/md";
 
 // vsc icons
-import * as Vsc from "react-icons/vsc";
+// import * as Vsc from "react-icons/vsc";
+
+import { addMetadata } from "../../features/objectMetadataSlice";
 
 function GridToolbar() {
   const objectSelector = useRef(null);
@@ -121,23 +106,34 @@ function GridToolbar() {
   // global state
   const dispatch = useDispatch();
 
+  // get userInfo from global state
   let userInfo = useSelector((state) => state.userInfo.userInfo);
 
+  // get selectedObject from global state
   const selectedObject = useSelector(
     (state) => state.selectedObject.selectedObject
   );
+
+  // get selectedTemplate from global state
   const selectedTemplate = useSelector(
     (state) => state.selectedTemplate.selectedTemplate
   );
+
+  // get selectedQuery from global state
   const selectedQuery = useSelector(
     (state) => state.selectedQuery.selectedQuery
   );
+
+  // get metadata from global state
+  const objectMetadata = useSelector((state) => state.objectMetadata);
 
   let objectOptions = useSelector((state) => state.objectList.objectList);
 
   let templateOptions = useSelector((state) => state.templateList.templateList);
 
   let queryOptions = useSelector((state) => state.queryList.queryList);
+
+  // const metadataFields = metadataMap.get(selectedObject);
 
   let hasUserInfo = useRef(false);
   let hasOrgObjects = useRef(false);
@@ -192,7 +188,7 @@ function GridToolbar() {
         })
         .catch((err) => {
           showToast(
-            "Error retrieving org objects",
+            "GridToolbar() - Error retrieving org objects",
             err.message,
             "Error!",
             0,
@@ -234,12 +230,13 @@ function GridToolbar() {
 
               // load template selector options
               console.log("Loading template selector options");
-              tb.selectedObjectChanged(selectedObject, userInfo).then(
-                (result) => {
+              tbFunc
+                .selectedObjectChanged(selectedObject, userInfo, objectMetadata)
+                .then((result) => {
                   if (result.status !== "ok") {
                     // alert user to error
                     showToast(
-                      "Error retrieving org objects",
+                      `GridToolbar() - Error retrieving templates for ${selectedObject}`,
                       result.errorMessage,
                       "Error!",
                       0,
@@ -249,29 +246,60 @@ function GridToolbar() {
                     return;
                   }
                   // set selectedObject state
-                  console.log("Storing selected object state");
+                  console.log("GridToolbar() - Storing selected object state");
                   dispatch(setSelectedObject(selectedObject));
 
-                  console.log("Displaying template options");
+                  console.log("GridToolbar() - Displaying template options");
                   console.log(result.records);
 
                   // storing template options state
-                  console.log("Storing template options state");
+                  console.log("GridToolbar() - Storing template options state");
                   dispatch(setTemplateList(result.records));
+
+                  // store object metadata if needed
+                  tbFunc
+                    .objectMetadataManager(
+                      selectedObject,
+                      userInfo,
+                      objectMetadata
+                    )
+                    .then((result) => {
+                      if (result.status !== "ok") {
+                        // display error message
+                        showToast(
+                          `GridToolbar() - Error setting metadata for ${selectedObject}`,
+                          result.errorMessage,
+                          "Error!",
+                          0,
+                          true
+                        );
+                        console.log(result.errorMessage);
+                        return;
+                      }
+
+                      // store object metadata in global state
+                      const objMetadata = result.records;
+                      dispatch(
+                        addMetadata({
+                          objName: selectedObject,
+                          metadata: objMetadata,
+                        })
+                      );
+                    });
 
                   // set the template selector to the first value
                   if (result.records.length > 0) {
                   }
-                }
-              );
+                });
 
               // load query selector options
-              console.log("Loading query options");
-              tb.loadQuerySelectorOptions(selectedObject, userInfo).then(
-                (result) => {
+              console.log("GridToolbar() - Loading query options");
+              tbFunc
+                .loadQuerySelectorOptions(selectedObject, userInfo)
+                .then((result) => {
                   if (result.status !== "ok") {
                     showToast(
-                      "Error retrieving query templates",
+                      "GridToolbar() - Error retrieving query templates",
                       result.errorMessage,
                       "Error!",
                       0,
@@ -282,18 +310,17 @@ function GridToolbar() {
                   }
 
                   // store query option state
-                  console.log("Displaying query options");
+                  console.log("GridToolbar() - Displaying query options");
                   console.log(result.records);
 
-                  console.log("Storing query options state");
+                  console.log("GridToolbar() - Storing query options state");
                   dispatch(setQueryList(result.records));
 
                   // set the query selector to the first value
                   if (result.records.length > 0) {
                     // templateSelector.current.state.value = options[0];
                   }
-                }
-              );
+                });
             }}
           />
         </Box>
@@ -309,37 +336,43 @@ function GridToolbar() {
               placeholder='Select template'
               dataSource={templateOptions}
               onChange={(e) => {
-                console.log("Selected template changed");
+                console.log("GridToolbar() - Selected template changed");
                 let selectedTemplate = e.value;
 
                 // configure the grid columns
-                tb.SelectedTemplateChanged(
-                  selectedObject,
-                  selectedTemplate,
-                  userInfo
-                ).then((result) => {
-                  if (result.status !== "ok") {
-                    showToast(
-                      "Error retrieving template fields",
-                      result.errorMessage,
-                      "Error!",
-                      0,
-                      true
+                tbFunc
+                  .SelectedTemplateChanged(
+                    selectedObject,
+                    selectedTemplate,
+                    userInfo
+                  )
+                  .then((result) => {
+                    if (result.status !== "ok") {
+                      showToast(
+                        "GridToolbar() - Error retrieving template fields",
+                        result.errorMessage,
+                        "Error!",
+                        0,
+                        true
+                      );
+                      console.log(result.errorMessage);
+                      return;
+                    }
+
+                    const templateFields = result.records;
+
+                    // store template fields in global state
+                    console.log(
+                      "GridToolbar() - Storing template fields state"
                     );
-                    console.log(result.errorMessage);
-                    return;
-                  }
+                    dispatch(setTemplateFields(templateFields));
 
-                  const templateFields = result.records;
-
-                  // store template fields in global state
-                  console.log("Storing template fields state");
-                  dispatch(setTemplateFields(templateFields));
-
-                  // store selectedTemplate in global state
-                  console.log("Storing selected template state");
-                  dispatch(setSelectedTemplate(selectedTemplate));
-                });
+                    // store selectedTemplate in global state
+                    console.log(
+                      "GridToolbar() - Storing selected template state"
+                    );
+                    dispatch(setSelectedTemplate(selectedTemplate));
+                  });
               }}
             />
           </Box>
@@ -448,20 +481,21 @@ function GridToolbar() {
             placeholder='Select query'
             dataSource={queryOptions}
             onChange={(e) => {
-              console.log("Selected query changed");
+              console.log("GridToolbar() - Selected query changed");
               let selectedQuery = e.value;
 
               // store selectedQuery in global state
-              console.log("Storing selectedQuery state");
+              console.log("GridToolbar() - Storing selectedQuery state");
               dispatch(setSelectedQuery(selectedQuery));
 
               // execute the query
-              console.log("Executing selectedQueryChanged");
-              tb.SelectedQueryChanged(selectedObject, selectedQuery).then(
-                (result) => {
+              console.log("GridToolbar() - Executing selectedQueryChanged");
+              tbFunc
+                .SelectedQueryChanged(selectedObject, selectedQuery)
+                .then((result) => {
                   if (result.status !== "ok") {
                     showToast(
-                      "Error retrieving query templates",
+                      "GridToolbar() - Error retrieving query templates",
                       result.errorMessage,
                       "Error!",
                       0,
@@ -471,16 +505,18 @@ function GridToolbar() {
                     return;
                   }
 
+                  // convert date strings to objects
+                  result.records.forEach((r) => {});
+
                   const queryResult = result.records[0];
 
-                  console.log("Displaying query results");
+                  console.log("GridToolbar() - Displaying query results");
                   console.log(queryResult);
 
                   // store query results in global state
-                  console.log("Storing query results state");
+                  console.log("GridToolbar() - Storing query results state");
                   dispatch(setGridData(queryResult));
-                }
-              );
+                });
             }}
           />
         </Box>

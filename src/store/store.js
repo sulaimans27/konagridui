@@ -4,7 +4,6 @@ import filterSettingsReducer from "../features/filterSettingsSlice";
 import gridColumnsReducer from "../features/gridColumnsSlice";
 import gridDataReducer from "../features/gridDataSlice";
 import groupSettingsReducer from "../features/groupSettingsSlice";
-import metadataMapReducer from "../features/metadataMapSlice";
 import objectListReducer from "../features/objectListSlice";
 import queryListReducer from "../features/queryListSlice";
 import queryBuilderVisabilityReducer from "../features/queryBuilderVisabilitySlice";
@@ -17,7 +16,7 @@ import relatedTemplateFieldsReducer from "../features/relatedTemplateFieldsSlice
 import relatedTemplateListReducer from "../features/relatedTemplateFieldsSlice";
 import selectedAppReducer from "../features/selectedAppSlice";
 import selectedAppTitleReducer from "../features/selectedAppTitleSlice";
-import selectedObjectReducer from "../features/objectSlice";
+import selectedObjectReducer from "../features/selectedObjectSlice";
 import selectedQueryReducer from "../features/querySlice";
 import selectedRelatedTemplateReducer from "../features/selectedRelatedTemplateSlice";
 import selectedTemplateReducer from "../features/selectedTemplateSlice";
@@ -28,14 +27,14 @@ import templateListReducer from "../features/templateListSlice";
 import templateFieldsReducer from "../features/templateFieldsSlice";
 import userInfoReducer from "../features/userInfoSlice";
 
+import objectMetadataReducer from "../features/objectMetadataSlice";
+
 export const store = configureStore({
   reducer: {
     gridColumns: gridColumnsReducer,
     filterSettings: filterSettingsReducer,
     gridData: gridDataReducer,
     groupSettings: groupSettingsReducer,
-    metadata: metadataMapReducer,
-    metadataMap: metadataMapReducer,
     objectList: objectListReducer,
     query: selectedQueryReducer,
     queryList: queryListReducer,
@@ -59,5 +58,6 @@ export const store = configureStore({
     templateList: templateListReducer,
     templateFields: templateFieldsReducer,
     userInfo: userInfoReducer,
+    objectMetadata: objectMetadataReducer,
   },
 });

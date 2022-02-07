@@ -3,13 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { ColumnDirective } from "@syncfusion/ej2-react-grids";
 
 // state management
-import { setSelectedObject } from "../../features/objectSlice";
+import { setSelectedObject } from "../../features/selectedObjectSlice";
 
 import { setSelectedTemplate } from "../../features/selectedTemplateSlice";
 
 import { setSelectedQuery } from "../../features/querySlice";
 
 import { setGridData } from "../../features/gridDataSlice";
+
+import {
+  addMetadata,
+  updateMetadata,
+  deleteMetadata,
+} from "../../features/objectMetadataSlice";
 
 // get template fields
 export async function getTemplateFields(selectedTemplate) {
@@ -172,10 +178,6 @@ export async function selectedObjectChanged(selectedObject, userInfo) {
 
   // get all columns
   let columns = null;
-
-  let is_public = true;
-  let is_active = true;
-  let is_related = false;
 
   // get the PUBLIC templates from the database
   let values = {
@@ -548,6 +550,65 @@ export async function SelectedQueryChanged(selectedObject, selectedQuery) {
       status: "error",
       errorMessage: error.message,
       records: [],
+    };
+  }
+}
+
+export async function objectMetadataManager(sobject, userInfo, objectMetadata) {
+  // check if array has metadata for sobject
+  const objMetadata = objectMetadata.metadata;
+
+  const hasObjMetadata = objMetadata.find((o) => o.objName === sobject);
+
+  if (hasObjMetadata === undefined) {
+    const metadataUrl = `/salesforce/sobjectFieldsDescribe`;
+
+    const payload = {
+      sobject: sobject,
+      profileName: userInfo.profileName,
+      profileId: userInfo.profileId,
+    };
+
+    let metadataRecords = [];
+
+    try {
+      let metadataResponse = await fetch(metadataUrl, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!metadataResponse.ok) {
+        throw new Error(metadataResponse.error.message);
+      }
+
+      const result = await metadataResponse.json();
+
+      if (result.status !== "ok") {
+        throw new Error(metadataResponse.errorMessage);
+      }
+
+      const objMetadata = result.records;
+
+      return {
+        status: "ok",
+        errorMessage: null,
+        records: result.records,
+      };
+    } catch (err) {
+      return {
+        status: "error",
+        errorMessage: err.message,
+        records: [],
+      };
+    }
+  } else {
+    return {
+      status: "ok",
+      errorMessage: null,
+      records: objMetadata,
     };
   }
 }

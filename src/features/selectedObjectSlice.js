@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // {selectedObject: { selectedObject: 'some object'}}}
 
 // sets selected object state
-export const objectSlice = createSlice({
+export const selectedObjectSlice = createSlice({
   name: "selectedObject",
   initialState: {
     selectedObject: null,
@@ -15,6 +15,6 @@ export const objectSlice = createSlice({
   },
 });
 
-export const { setSelectedObject } = objectSlice.actions;
+export const { setSelectedObject } = selectedObjectSlice.actions;
 
-export default objectSlice.reducer;
+export default selectedObjectSlice.reducer;
